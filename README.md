@@ -1,9 +1,9 @@
 # Course Viewer
 
-A static documentation website generated from PDF course files.
-No frameworks, no build step — just open `site/index.html` in a browser.
+A private static slide viewer hosted on GitHub Pages.
+Each course is organized by module and section with a sidebar, fullscreen viewer, and keyboard navigation.
 
-## Quick Start
+## Setup
 
 ### 1. Install dependencies
 
@@ -11,91 +11,82 @@ No frameworks, no build step — just open `site/index.html` in a browser.
 pip install -r requirements.txt
 ```
 
-### 2. Add your PDFs
+### 2. Add PDFs
 
-Place PDF files in the correct course folders:
+Place PDFs in the correct course folders (git-ignored):
 
 ```
 pdfs/
-├── course1/   ← PDFs for Course 1
-└── course2/   ← PDFs for Course 2
+├── course1/
+│   ├── config.yaml   ← course settings + footer_patterns
+│   └── *.pdf
+└── course2/
+    ├── config.yaml
+    └── *.pdf
 ```
 
-Rename the folders to anything you like — the folder name becomes the course title.
-
-### 3. Parse PDFs
+### 3. Parse slides
 
 ```bash
-python scripts/parse_pdfs.py
+python scripts/parse_slides.py --course course1 --verbose
 ```
 
-Add `--verbose` to see heading detection output:
+This converts each PDF page to a JPEG and writes `docs/data/courses.json`.
+
+### 4. Preview locally
 
 ```bash
-python scripts/parse_pdfs.py --verbose
+python scripts/build_config.py   # generates docs/config.js from .env
+python -m http.server 8000
+# open http://localhost:8000/docs/
 ```
 
-This writes `data/courses.json`.
+### 5. Deploy
 
-### 4. View the site
+```bash
+git add docs/ && git commit -m "update slides" && git push
+```
 
-Open `site/index.html` in any browser. No server required.
+GitHub Actions injects the password from the `SITE_PASSWORD` secret and deploys to Pages.
 
-> **Note:** Some browsers block `fetch()` for local files. If the page shows
-> "courses.json not found", serve the project with a simple HTTP server:
->
-> ```bash
-> python -m http.server 8000
-> # then open http://localhost:8000/site/
-> ```
+## Changing the password
 
-## Adding a new course
-
-1. Create a new folder under `pdfs/`, e.g. `pdfs/course3/`
-2. Drop your PDFs in
-3. Re-run `python scripts/parse_pdfs.py`
-4. Refresh the browser
-
-## Adding a new PDF to an existing course
-
-Drop the PDF into the relevant course folder and re-run the parser.
+1. Go to repo → Settings → Secrets → Actions
+2. Update `SITE_PASSWORD`
+3. Re-run the Deploy workflow (or push any commit)
 
 ## Parser options
 
 | Flag | Description |
 |---|---|
-| `--verbose` | Print detected headings and page count |
-| `--pdfs-dir PATH` | Override the PDFs root directory |
-| `--output PATH` | Override the output JSON path |
-
-## Heading detection
-
-The parser uses **PyMuPDF** to inspect font size and bold weight per span:
-
-| Level | Condition |
-|---|---|
-| H1 | size ≥ 16 pt **and** bold |
-| H2 | size ≥ 13 pt **and** bold |
-| H3 | size ≥ 11 pt **and** bold |
-
-If no headings are detected in a PDF, the parser falls back to grouping content by paragraphs.
+| `--verbose` | Show detected modules and sections |
+| `--course NAME` | Process one course only |
+| `--dpi N` | Render DPI (default 150) |
+| `--quality N` | JPEG quality 1–95 (default 85) |
 
 ## Project structure
 
 ```
 course-viewer/
-├── pdfs/                 # Your PDFs go here (git-ignored)
+├── pdfs/                    # Local only — git-ignored
 │   ├── course1/
+│   │   ├── config.yaml
+│   │   └── *.pdf
 │   └── course2/
 ├── scripts/
-│   └── parse_pdfs.py     # PDF parser
-├── data/
-│   └── courses.json      # Parsed output (committed)
-├── site/
-│   ├── index.html        # Static site
+│   ├── parse_slides.py      # PDF → JPEG + JSON
+│   └── build_config.py      # Injects password for local dev
+├── docs/                    # GitHub Pages root
+│   ├── index.html
 │   ├── style.css
-│   └── app.js
-├── requirements.txt
-├── README.md
+│   ├── app.js
+│   ├── data/courses.json
+│   └── slides/
+│       ├── course1/
+│       └── course2/
+├── .github/workflows/
+│   └── deploy.yml           # CI: inject password + deploy Pages
+├── .env                     # Local only — git-ignored
+├── .env.example
 └── .gitignore
 ```

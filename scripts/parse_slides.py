@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-Black Hat Training Slide Parser
+Slide Deck Parser
 Converts PDF slides to JPEG images and builds docs/data/courses.json.
 
-Detection rules for course1 (AI Red Teaming):
+Detection rules:
   AGENDA_PAGE    — text contains "Agenda" near top + "Module N" anywhere
   SECTION_TITLE  — first non-footer line matches ^\d+\.\d+[\s:]
-  FOOTER         — lines matching "AI Red Teaming", "Gary Lopez", or bare numbers → ignored
+  FOOTER         — lines matching footer_patterns in config.yaml, or bare numbers → ignored
   INTRO_SLIDES   — pages before first Agenda → grouped as "Course Info" preamble
 
 Usage:
@@ -35,7 +35,8 @@ DOCS_DIR = ROOT / "docs"
 OUT_JSON = DOCS_DIR / "data" / "courses.json"
 
 # ── Regexes ────────────────────────────────────────────────────────────────
-FOOTER_RE       = re.compile(r'(AI Red Teaming|Gary Lopez|Black Hat|GovTech|Botanica|\bBHUS\b)', re.I)
+# FOOTER_RE is built per-course from config.yaml footer_patterns (see load_config)
+FOOTER_RE       = re.compile(r'(?!)', re.I)   # default: match nothing
 BARE_NUMBER_RE  = re.compile(r'^\d{1,3}$')
 AGENDA_RE       = re.compile(r'\bAgenda\b', re.I)
 MODULE_RE       = re.compile(r'\bModule\s+(\d+)\b', re.I)
@@ -332,10 +333,19 @@ def parse_course(course_dir: Path, cfg: dict, args) -> dict:
 
 def load_config(course_dir: Path) -> dict:
     p = course_dir / "config.yaml"
+    cfg = {}
     if p.exists():
         with open(p) as f:
-            return yaml.safe_load(f) or {}
-    return {"id": course_dir.name, "name": course_dir.name.replace("-", " ").title()}
+            cfg = yaml.safe_load(f) or {}
+    cfg.setdefault("id",   course_dir.name)
+    cfg.setdefault("name", course_dir.name.replace("-", " ").title())
+
+    # Build FOOTER_RE from config so no author/org names appear in this script
+    patterns = cfg.get("footer_patterns", [])
+    if patterns:
+        global FOOTER_RE
+        FOOTER_RE = re.compile("|".join(re.escape(p) for p in patterns), re.I)
+    return cfg
 
 
 # ── Entry point ────────────────────────────────────────────────────────────

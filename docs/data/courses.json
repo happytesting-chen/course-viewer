@@ -2,7 +2,7 @@
   "courses": [
     {
       "id": "course2",
-      "name": "AI Cybersecurity",
+      "name": "Course 2",
       "modules": [
         {
           "id": "mod0",
@@ -258,12 +258,13 @@
             }
           ]
         }
-      ]
+      ],
+      "author": ""
     },
     {
       "id": "course1",
-      "name": "AI Red Teaming - Day 1 & 2",
-      "author": "Gary Lopez",
+      "name": "Course 1",
+      "author": "",
       "modules": [
         {
           "id": "mod0",
@@ -757,7 +758,7 @@
         {
           "id": "mod5",
           "number": 5,
-          "title": "Open Source Tools for AI Red Teaming",
+          "title": "Open Source Tools for AI Security",
           "duration": "45 min",
           "agenda_slide": "slides/course1/page_0205.jpg",
           "sections": [

@@ -4,6 +4,8 @@ PDF Course Parser
 Reads PDFs from pdfs/course1/ and pdfs/course2/, detects headings via font size/bold,
 and writes structured JSON to data/courses.json.
 
+Falls back to OCR (tesseract) automatically for image-based PDFs.
+
 Usage:
     python scripts/parse_pdfs.py
     python scripts/parse_pdfs.py --verbose
@@ -22,6 +24,21 @@ except ImportError:
     print("PyMuPDF not found. Install with: pip install PyMuPDF", file=sys.stderr)
     sys.exit(1)
 
+# OCR deps — imported lazily so text-based PDFs don't require them
+def _import_ocr():
+    try:
+        from pdf2image import convert_from_path
+        import pytesseract
+        return convert_from_path, pytesseract
+    except ImportError:
+        print(
+            "OCR dependencies missing. Install with:\n"
+            "  pip install pdf2image pytesseract\n"
+            "  sudo apt-get install tesseract-ocr poppler-utils",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
 
 # ---------------------------------------------------------------------------
 # Config
@@ -29,21 +46,19 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parent.parent
 PDFS_DIR = ROOT / "pdfs"
+RAW_DIR  = ROOT / "raw"
 OUTPUT_FILE = ROOT / "data" / "courses.json"
 
-# Font-size thresholds for heading detection (points)
 H1_MIN_SIZE = 16
 H2_MIN_SIZE = 13
 H3_MIN_SIZE = 11
 
-# Patterns to strip (page numbers, headers/footers, etc.)
 STRIP_PATTERNS = [
-    re.compile(r"^\s*\d+\s*$"),                      # bare page numbers
+    re.compile(r"^\s*\d+\s*$"),
     re.compile(r"^\s*page\s+\d+\s*(of\s+\d+)?\s*$", re.IGNORECASE),
-    re.compile(r"^\s*©.*$", re.IGNORECASE),           # copyright lines
+    re.compile(r"^\s*©.*$", re.IGNORECASE),
 ]
 
-# Minimum content length to be considered a real section (chars)
 MIN_CONTENT_CHARS = 20
 
 
@@ -62,11 +77,9 @@ def is_noise_line(text: str) -> bool:
 
 
 def classify_span(span: dict) -> str | None:
-    """Return 'h1', 'h2', 'h3', or None based on font properties."""
     size = span.get("size", 0)
     flags = span.get("flags", 0)
-    is_bold = bool(flags & 2**4)  # bit 4 = bold in PyMuPDF
-
+    is_bold = bool(flags & 2**4)
     if size >= H1_MIN_SIZE and is_bold:
         return "h1"
     if size >= H2_MIN_SIZE and is_bold:
@@ -77,36 +90,111 @@ def classify_span(span: dict) -> str | None:
 
 
 def clean_text(text: str) -> str:
-    # Collapse excessive whitespace but preserve paragraph breaks
     text = re.sub(r" {2,}", " ", text)
     text = re.sub(r"\n{3,}", "\n\n", text)
     return text.strip()
 
 
+def has_text(doc) -> bool:
+    """Return True if the PDF has meaningful extractable text (not just metadata/page numbers)."""
+    total_chars = 0
+    for i, page in enumerate(doc):
+        total_chars += len(page.get_text().strip())
+        if i >= 4:
+            break
+    # Require at least 300 chars across the first 5 pages to count as text-based
+    return total_chars > 300
+
+
 # ---------------------------------------------------------------------------
-# Core parser
+# OCR path
 # ---------------------------------------------------------------------------
 
-def parse_pdf(pdf_path: Path, verbose: bool = False) -> list[dict]:
-    """
-    Parse a single PDF and return a flat list of blocks:
-        {"level": "h1"|"h2"|"h3"|"body", "text": "..."}
-    """
+def raw_path_for(pdf_path: Path) -> Path:
+    """Mirror pdfs/<course>/<name>.pdf → raw/<course>/<name>.txt"""
+    rel = pdf_path.relative_to(PDFS_DIR)
+    return RAW_DIR / rel.with_suffix(".txt")
+
+
+def save_raw(text: str, dest: Path) -> None:
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    dest.write_text(text, encoding="utf-8")
+
+
+def ocr_pdf(pdf_path: Path, verbose: bool = False) -> list[dict]:
+    """Convert each page to an image, run Tesseract OCR, save raw text, return blocks."""
+    convert_from_path, pytesseract = _import_ocr()
+
+    if verbose:
+        print(f"  [OCR] {pdf_path.name}")
+
+    images = convert_from_path(str(pdf_path), dpi=200)
+    page_texts: list[str] = []
+
+    for page_num, img in enumerate(images, start=1):
+        page_texts.append(pytesseract.image_to_string(img, lang="eng"))
+        if verbose:
+            print(f"    page {page_num}/{len(images)} done", end="\r")
+
+    if verbose:
+        print()
+
+    full_text = "\n\n--- PAGE BREAK ---\n\n".join(page_texts)
+
+    # Save raw output so the user can review / edit it
+    dest = raw_path_for(pdf_path)
+    save_raw(full_text, dest)
+    if verbose:
+        print(f"  Raw text saved → {dest}")
+
+    return _text_to_blocks(full_text)
+
+
+def _text_to_blocks(text: str) -> list[dict]:
+    """Convert a raw OCR string into body blocks, stripping page-break markers."""
+    blocks: list[dict] = []
+    # Remove page-break markers inserted during OCR
+    text = re.sub(r"\n*--- PAGE BREAK ---\n*", "\n\n", text)
+
+    paragraph_parts: list[str] = []
+    for line in text.splitlines():
+        line = line.strip()
+        if not line or is_noise_line(line):
+            if paragraph_parts:
+                para = " ".join(paragraph_parts).strip()
+                if len(para) >= MIN_CONTENT_CHARS:
+                    blocks.append({"level": "body", "text": para})
+                paragraph_parts = []
+        else:
+            paragraph_parts.append(line)
+
+    if paragraph_parts:
+        para = " ".join(paragraph_parts).strip()
+        if len(para) >= MIN_CONTENT_CHARS:
+            blocks.append({"level": "body", "text": para})
+
+    return blocks
+
+
+# ---------------------------------------------------------------------------
+# Native text path
+# ---------------------------------------------------------------------------
+
+def parse_pdf_native(pdf_path: Path, verbose: bool = False) -> list[dict]:
     doc = fitz.open(str(pdf_path))
     blocks: list[dict] = []
 
     if verbose:
-        print(f"  Parsing: {pdf_path.name} ({len(doc)} pages)")
+        print(f"  [native] {pdf_path.name} ({len(doc)} pages)")
 
-    for page_num, page in enumerate(doc, start=1):
-        raw_dict = page.get_text("rawdict", flags=fitz.TEXT_PRESERVE_WHITESPACE)
+    for page in doc:
+        raw_dict = page.get_text("dict")
 
         for block in raw_dict.get("blocks", []):
-            if block.get("type") != 0:  # 0 = text block
+            if block.get("type") != 0:
                 continue
 
-            block_level = None
-            block_text_parts = []
+            block_text_parts: list[str] = []
 
             for line in block.get("lines", []):
                 line_text = ""
@@ -116,11 +204,9 @@ def parse_pdf(pdf_path: Path, verbose: bool = False) -> list[dict]:
                     span_text = span.get("text", "")
                     if not span_text.strip():
                         continue
-
                     level = classify_span(span)
                     if level and line_level is None:
                         line_level = level
-
                     line_text += span_text
 
                 line_text = line_text.strip()
@@ -128,20 +214,17 @@ def parse_pdf(pdf_path: Path, verbose: bool = False) -> list[dict]:
                     continue
 
                 if line_level:
-                    # Flush accumulated body text before this heading line
-                    if block_text_parts and block_level is None:
+                    if block_text_parts:
                         body = clean_text("\n".join(block_text_parts))
                         if body:
                             blocks.append({"level": "body", "text": body})
                         block_text_parts = []
-                    # Emit heading immediately
                     blocks.append({"level": line_level, "text": line_text})
                     if verbose:
                         print(f"    [{line_level.upper()}] {line_text[:80]}")
                 else:
                     block_text_parts.append(line_text)
 
-            # Flush remaining body text
             if block_text_parts:
                 body = clean_text("\n".join(block_text_parts))
                 if body:
@@ -151,16 +234,36 @@ def parse_pdf(pdf_path: Path, verbose: bool = False) -> list[dict]:
     return blocks
 
 
+def parse_pdf(pdf_path: Path, verbose: bool = False) -> list[dict]:
+    """Auto-detect text vs image PDF and choose the right extraction path.
+
+    If a raw/<course>/<stem>.txt already exists, use it directly (skips OCR).
+    Edit that file to fix OCR mistakes, then re-run the parser without re-doing OCR.
+    """
+    raw = raw_path_for(pdf_path)
+
+    if raw.exists():
+        if verbose:
+            print(f"  [raw cache] {pdf_path.name} → using {raw}")
+        return _text_to_blocks(raw.read_text(encoding="utf-8"))
+
+    doc = fitz.open(str(pdf_path))
+    text_based = has_text(doc)
+    doc.close()
+
+    if text_based:
+        return parse_pdf_native(pdf_path, verbose=verbose)
+
+    if verbose:
+        print(f"  No text layer in {pdf_path.name} — running OCR")
+    return ocr_pdf(pdf_path, verbose=verbose)
+
+
+# ---------------------------------------------------------------------------
+# Block → chapter/section structure
+# ---------------------------------------------------------------------------
+
 def blocks_to_chapters(blocks: list[dict], verbose: bool = False) -> list[dict]:
-    """
-    Convert flat block list into nested chapter/section structure.
-    Strategy:
-      h1 → new chapter
-      h2 → new section within current chapter
-      h3 → sub-heading prepended to section content
-      body → appended to current section content
-    Falls back to page-based splitting if no headings are detected.
-    """
     chapters: list[dict] = []
     current_chapter: dict | None = None
     current_section: dict | None = None
@@ -169,8 +272,7 @@ def blocks_to_chapters(blocks: list[dict], verbose: bool = False) -> list[dict]:
 
     if heading_count == 0:
         if verbose:
-            print("  No headings detected — falling back to paragraph grouping")
-        # Group every ~5 body blocks as one section under a single chapter
+            print("  No headings detected — grouping by paragraphs")
         chapter = {"title": "Content", "sections": []}
         body_parts: list[str] = []
         section_idx = 1
@@ -184,15 +286,15 @@ def blocks_to_chapters(blocks: list[dict], verbose: bool = False) -> list[dict]:
                     })
                     section_idx += 1
                     body_parts = []
-        chapters.append(chapter)
+        if chapter["sections"]:
+            chapters.append(chapter)
         return chapters
 
     def flush_section():
         nonlocal current_section
         if current_section and current_chapter is not None:
-            content = current_section.get("_content_parts", [])
-            current_section["content"] = clean_text("\n\n".join(content))
-            del current_section["_content_parts"]
+            parts = current_section.pop("_content_parts", [])
+            current_section["content"] = clean_text("\n\n".join(parts))
             current_chapter["sections"].append(current_section)
         current_section = None
 
@@ -209,28 +311,23 @@ def blocks_to_chapters(blocks: list[dict], verbose: bool = False) -> list[dict]:
         current_chapter = None
 
     for block in blocks:
-        level = block["level"]
-        text = block["text"]
+        level, text = block["level"], block["text"]
 
         if level == "h1":
             flush_chapter()
             current_chapter = {"title": text, "sections": []}
-
         elif level == "h2":
             if current_chapter is None:
                 current_chapter = {"title": "Introduction", "sections": []}
             flush_section()
             current_section = {"heading": text, "_content_parts": []}
-
         elif level == "h3":
             if current_chapter is None:
                 current_chapter = {"title": "Introduction", "sections": []}
             if current_section is None:
                 current_section = {"heading": text, "_content_parts": []}
             else:
-                # Treat h3 as bold sub-heading in body
                 current_section["_content_parts"].append(f"**{text}**")
-
         elif level == "body":
             if current_chapter is None:
                 current_chapter = {"title": "Introduction", "sections": []}
@@ -244,7 +341,6 @@ def blocks_to_chapters(blocks: list[dict], verbose: bool = False) -> list[dict]:
 
 
 def parse_course(course_dir: Path, course_name: str, verbose: bool = False) -> dict:
-    """Parse all PDFs in a course directory into a course object."""
     pdf_files = sorted(course_dir.glob("*.pdf"))
     if not pdf_files:
         if verbose:
@@ -255,11 +351,9 @@ def parse_course(course_dir: Path, course_name: str, verbose: bool = False) -> d
     for pdf_path in pdf_files:
         blocks = parse_pdf(pdf_path, verbose=verbose)
         chapters = blocks_to_chapters(blocks, verbose=verbose)
-        # Prefix chapter titles with the PDF filename if multiple PDFs
         if len(pdf_files) > 1:
-            stem = pdf_path.stem
             for ch in chapters:
-                ch["_source"] = stem
+                ch["_source"] = pdf_path.stem
         all_chapters.extend(chapters)
 
     return {"name": course_name, "chapters": all_chapters}
@@ -270,50 +364,51 @@ def parse_course(course_dir: Path, course_name: str, verbose: bool = False) -> d
 # ---------------------------------------------------------------------------
 
 def main():
+    global RAW_DIR
+
     parser = argparse.ArgumentParser(description="Parse PDFs into courses.json")
-    parser.add_argument("--verbose", "-v", action="store_true",
-                        help="Print detected headings and debug info")
-    parser.add_argument("--pdfs-dir", type=Path, default=PDFS_DIR,
-                        help=f"Root PDFs directory (default: {PDFS_DIR})")
-    parser.add_argument("--output", type=Path, default=OUTPUT_FILE,
-                        help=f"Output JSON path (default: {OUTPUT_FILE})")
+    parser.add_argument("--verbose", "-v", action="store_true")
+    parser.add_argument("--pdfs-dir", type=Path, default=PDFS_DIR)
+    parser.add_argument("--raw-dir", type=Path, default=RAW_DIR,
+                        help="Directory for raw OCR text files")
+    parser.add_argument("--output", type=Path, default=OUTPUT_FILE)
+    parser.add_argument("--force-ocr", action="store_true",
+                        help="Re-run OCR even if raw/*.txt files already exist")
     args = parser.parse_args()
 
-    pdfs_root: Path = args.pdfs_dir
-    output: Path = args.output
+    RAW_DIR = args.raw_dir
 
-    if not pdfs_root.exists():
-        print(f"Error: PDFs directory not found: {pdfs_root}", file=sys.stderr)
+    if args.force_ocr:
+        for f in RAW_DIR.rglob("*.txt"):
+            f.unlink()
+        if args.verbose:
+            print("Cleared raw cache — will re-run OCR")
+
+    if not args.pdfs_dir.exists():
+        print(f"Error: PDFs directory not found: {args.pdfs_dir}", file=sys.stderr)
         sys.exit(1)
 
-    # Discover course folders (any subdirectory of pdfs/)
-    course_dirs = [d for d in sorted(pdfs_root.iterdir()) if d.is_dir()]
+    course_dirs = [d for d in sorted(args.pdfs_dir.iterdir()) if d.is_dir()]
     if not course_dirs:
-        print(f"No course subdirectories found in {pdfs_root}.", file=sys.stderr)
-        print("Create pdfs/course1/ and pdfs/course2/ and place PDFs inside.", file=sys.stderr)
+        print(f"No course subdirectories found in {args.pdfs_dir}.", file=sys.stderr)
         sys.exit(1)
 
     courses = []
     for course_dir in course_dirs:
         course_name = course_dir.name.replace("-", " ").replace("_", " ").title()
         if args.verbose:
-            print(f"\nCourse: {course_name} ({course_dir})")
+            print(f"\nCourse: {course_name}")
         course = parse_course(course_dir, course_name, verbose=args.verbose)
         courses.append(course)
 
-    output.parent.mkdir(parents=True, exist_ok=True)
-    payload = {"courses": courses}
-    with open(output, "w", encoding="utf-8") as f:
-        json.dump(payload, f, ensure_ascii=False, indent=2)
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    with open(args.output, "w", encoding="utf-8") as f:
+        json.dump({"courses": courses}, f, ensure_ascii=False, indent=2)
 
     total_chapters = sum(len(c["chapters"]) for c in courses)
-    total_sections = sum(
-        len(ch["sections"])
-        for c in courses
-        for ch in c["chapters"]
-    )
+    total_sections = sum(len(ch["sections"]) for c in courses for ch in c["chapters"])
     print(f"\nDone. {len(courses)} course(s), {total_chapters} chapter(s), "
-          f"{total_sections} section(s) → {output}")
+          f"{total_sections} section(s) → {args.output}")
 
 
 if __name__ == "__main__":
