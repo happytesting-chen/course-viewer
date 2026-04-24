@@ -170,6 +170,11 @@ body {
 .mod-toggle:hover { background: var(--sb-hover); }
 .mod-toggle .caret { font-size: .6rem; opacity: .5; transition: transform .18s; margin-left: auto; }
 .mod-toggle.open .caret { transform: rotate(90deg); }
+.mod-toggle.active-mod {
+  color: var(--sb-active);
+  background: var(--sb-active-bg);
+  border-left: 2px solid var(--sb-active);
+}
 .mod-dur { font-size: .7rem; opacity: .45; font-weight: 400; margin-left: .3rem; }
 
 /* Section list */

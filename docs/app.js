@@ -97,43 +97,60 @@ function buildNav() {
 
   curCourse.modules.forEach(mod => {
     const wrap = document.createElement("div");
+    const isActiveMod  = mod === curMod;
+    const singleSection = mod.sections.length === 1;
 
     const btn = document.createElement("button");
-    const isActiveMod = mod === curMod;
-    btn.className = "mod-toggle" + (isActiveMod ? " open" : "");
-    btn.innerHTML =
-      `<span>Module ${mod.number}: ${esc(mod.title)}</span>` +
-      (mod.duration ? `<small class="mod-dur">${esc(mod.duration)}</small>` : "") +
-      `<span class="caret">▶</span>`;
-    wrap.appendChild(btn);
 
-    const secList = document.createElement("div");
-    secList.className = "sec-list" + (isActiveMod ? " open" : "");
-
-    mod.sections.forEach(sec => {
-      const link = document.createElement("div");
-      const isActiveSec = sec === curSec;
-      link.className = "sec-link" + (isActiveSec ? " active" : "");
-      link.textContent = `${sec.number} ${sec.title}`;
-      link.addEventListener("click", () => {
+    if (singleSection) {
+      // Per-file mode: module button IS the nav item — one click loads slides
+      const isActive = isActiveMod && mod.sections[0] === curSec;
+      btn.className = "mod-toggle" + (isActive ? " open active-mod" : "");
+      btn.innerHTML =
+        `<span>${esc(mod.title)}</span>` +
+        (mod.duration ? `<small class="mod-dur">${esc(mod.duration)}</small>` : "");
+      btn.addEventListener("click", () => {
         sidebarEl.classList.remove("open");
-        goTo(curCourse, mod, sec, 0);
+        goTo(curCourse, mod, mod.sections[0], 0);
       });
-      secList.appendChild(link);
-    });
+      wrap.appendChild(btn);
+    } else {
+      // Multi-section mode: collapsible module with section links beneath
+      btn.className = "mod-toggle" + (isActiveMod ? " open" : "");
+      btn.innerHTML =
+        `<span>Module ${mod.number}: ${esc(mod.title)}</span>` +
+        (mod.duration ? `<small class="mod-dur">${esc(mod.duration)}</small>` : "") +
+        `<span class="caret">▶</span>`;
+      wrap.appendChild(btn);
 
-    btn.addEventListener("click", () => {
-      const open = secList.classList.toggle("open");
-      btn.classList.toggle("open", open);
-    });
+      const secList = document.createElement("div");
+      secList.className = "sec-list" + (isActiveMod ? " open" : "");
 
-    wrap.appendChild(secList);
+      mod.sections.forEach(sec => {
+        const link = document.createElement("div");
+        link.className = "sec-link" + (sec === curSec ? " active" : "");
+        link.textContent = `${sec.number} ${sec.title}`;
+        link.addEventListener("click", () => {
+          sidebarEl.classList.remove("open");
+          goTo(curCourse, mod, sec, 0);
+        });
+        secList.appendChild(link);
+      });
+
+      btn.addEventListener("click", () => {
+        const open = secList.classList.toggle("open");
+        btn.classList.toggle("open", open);
+      });
+
+      wrap.appendChild(secList);
+    }
+
     navTree.appendChild(wrap);
   });
 }
 
 function scrollActiveLink() {
-  const active = navTree.querySelector(".sec-link.active");
+  const active = navTree.querySelector(".sec-link.active, .active-mod");
   active?.scrollIntoView({ block: "nearest" });
 }
 
