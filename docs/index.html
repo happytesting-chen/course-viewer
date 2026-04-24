@@ -74,5 +74,50 @@
   </div>
 
   <script src="./app.js"></script>
+
+  <!-- ── Password gate ──────────────────────────────────────── -->
+  <div id="pw-gate">
+    <div id="pw-box">
+      <h2>Black Hat Training Viewer</h2>
+      <p>This site is private. Enter the password to continue.</p>
+      <input id="pw-input" type="password" placeholder="Password" autocomplete="current-password" />
+      <button id="pw-submit">Enter</button>
+      <p id="pw-error" hidden>Incorrect password.</p>
+    </div>
+  </div>
+
+  <script>
+    // Change SITE_PASSWORD to whatever you want
+    const SITE_PASSWORD = "blackhat2026";
+    const SESSION_KEY   = "bhviewer_auth";
+
+    const gate    = document.getElementById("pw-gate");
+    const input   = document.getElementById("pw-input");
+    const submit  = document.getElementById("pw-submit");
+    const errMsg  = document.getElementById("pw-error");
+
+    function unlock() { gate.style.display = "none"; }
+
+    // Already authenticated this session?
+    if (sessionStorage.getItem(SESSION_KEY) === "1") {
+      unlock();
+    }
+
+    function attempt() {
+      if (input.value === SITE_PASSWORD) {
+        sessionStorage.setItem(SESSION_KEY, "1");
+        unlock();
+      } else {
+        errMsg.hidden = false;
+        input.value = "";
+        input.focus();
+        gate.querySelector("#pw-box").classList.add("shake");
+        setTimeout(() => gate.querySelector("#pw-box").classList.remove("shake"), 500);
+      }
+    }
+
+    submit.addEventListener("click", attempt);
+    input.addEventListener("keydown", e => { if (e.key === "Enter") attempt(); });
+  </script>
 </body>
 </html>

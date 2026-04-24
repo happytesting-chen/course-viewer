@@ -346,6 +346,82 @@ body {
 #fs-controls button:hover { background: rgba(255,255,255,.2); }
 #fs-counter { font-size: .85rem; opacity: .7; min-width: 80px; text-align: center; }
 
+/* ── Password gate ─────────────────────────────────────────── */
+#pw-gate {
+  position: fixed; inset: 0;
+  background: #0f1118;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+#pw-box {
+  background: #1b1f2e;
+  border: 1px solid #2a2f42;
+  border-radius: 12px;
+  padding: 2.5rem 2rem;
+  width: 100%;
+  max-width: 360px;
+  text-align: center;
+  box-shadow: 0 8px 40px rgba(0,0,0,.5);
+}
+
+#pw-box h2 {
+  color: #fff;
+  font-size: 1.15rem;
+  margin-bottom: .5rem;
+}
+
+#pw-box p {
+  color: #6b7280;
+  font-size: .85rem;
+  margin-bottom: 1.25rem;
+}
+
+#pw-input {
+  width: 100%;
+  background: #0f1118;
+  border: 1px solid #2a2f42;
+  border-radius: 7px;
+  color: #fff;
+  padding: .55rem .85rem;
+  font-size: .95rem;
+  outline: none;
+  margin-bottom: .75rem;
+  text-align: center;
+  letter-spacing: .1em;
+}
+#pw-input:focus { border-color: var(--accent); }
+
+#pw-submit {
+  width: 100%;
+  background: var(--accent);
+  border: none;
+  border-radius: 7px;
+  color: #fff;
+  padding: .55rem;
+  font-size: .95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .15s;
+}
+#pw-submit:hover { background: var(--accent-h); }
+
+#pw-error {
+  color: #f87171;
+  font-size: .82rem;
+  margin-top: .6rem;
+  margin-bottom: 0;
+}
+
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  20%,60%  { transform: translateX(-8px); }
+  40%,80%  { transform: translateX(8px); }
+}
+#pw-box.shake { animation: shake .4s ease; }
+
 /* ── Responsive ────────────────────────────────────────────── */
 @media (max-width: 720px) {
   #sidebar {
