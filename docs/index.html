@@ -86,25 +86,24 @@
     </div>
   </div>
 
+  <!-- config.js is generated at deploy time (never committed) -->
+  <!-- Locally: run `python scripts/build_config.py` to generate it -->
+  <script src="./config.js" onerror="document.getElementById('pw-box').innerHTML='<p style=color:#f87171>config.js missing.<br>Run: python scripts/build_config.py</p>'"></script>
   <script>
-    // Change SITE_PASSWORD to whatever you want
-    const SITE_PASSWORD = "blackhat2026";
-    const SESSION_KEY   = "bhviewer_auth";
+    const SESSION_KEY = "bhviewer_auth";
 
-    const gate    = document.getElementById("pw-gate");
-    const input   = document.getElementById("pw-input");
-    const submit  = document.getElementById("pw-submit");
-    const errMsg  = document.getElementById("pw-error");
+    const gate   = document.getElementById("pw-gate");
+    const input  = document.getElementById("pw-input");
+    const submit = document.getElementById("pw-submit");
+    const errMsg = document.getElementById("pw-error");
 
     function unlock() { gate.style.display = "none"; }
 
-    // Already authenticated this session?
-    if (sessionStorage.getItem(SESSION_KEY) === "1") {
-      unlock();
-    }
+    if (sessionStorage.getItem(SESSION_KEY) === "1") { unlock(); }
 
     function attempt() {
-      if (input.value === SITE_PASSWORD) {
+      const pwd = (typeof window.SITE_PASSWORD !== "undefined") ? window.SITE_PASSWORD : "";
+      if (input.value === pwd) {
         sessionStorage.setItem(SESSION_KEY, "1");
         unlock();
       } else {

@@ -1,6 +1,12 @@
 # PDFs are copyrighted — never commit them
 pdfs/
 
+# Secrets — never commit
+.env
+
+# Generated at deploy time by GitHub Actions (injected from secret)
+docs/config.js
+
 # Raw OCR text cache
 raw/
 
