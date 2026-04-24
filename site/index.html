@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Course Viewer</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Top Header -->
+  <header id="top-header">
+    <button id="menu-toggle" aria-label="Toggle sidebar">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="3" y1="6"  x2="21" y2="6"/>
+        <line x1="3" y1="12" x2="21" y2="12"/>
+        <line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </button>
+
+    <span id="site-title">Course Viewer</span>
+
+    <div id="search-wrap">
+      <svg id="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="2.5">
+        <circle cx="11" cy="11" r="8"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input id="search-input" type="search" placeholder="Search all content…" autocomplete="off" />
+    </div>
+
+    <button id="theme-toggle">☾ Dark</button>
+  </header>
+
+  <!-- Layout -->
+  <div id="layout">
+
+    <!-- Sidebar -->
+    <nav id="sidebar" aria-label="Course navigation"></nav>
+
+    <!-- Main -->
+    <main id="main">
+      <div id="content">
+        <p style="color:var(--text-muted);margin-top:2rem;text-align:center">Loading…</p>
+      </div>
+    </main>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
