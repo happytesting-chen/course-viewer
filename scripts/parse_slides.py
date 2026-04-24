@@ -136,6 +136,76 @@ def render_page(page, dest: Path, dpi: int, quality: int) -> None:
     pix.save(str(dest), output="jpeg", jpg_quality=quality)
 
 
+# ── Filename cleaner ───────────────────────────────────────────────────────
+
+def clean_stem(stem: str) -> str:
+    """Auto-derive a readable title from a PDF filename stem."""
+    s = re.sub(r'^\d+[\.\s\-_]*', '', stem)   # strip leading "01." / "02 "
+    s = re.sub(r'^pre_read_', '', s, flags=re.I)
+    s = s.replace('-', ' ').replace('_', ' ')
+    return s.strip().title() or stem
+
+
+# ── Per-file mode (one module per PDF) ────────────────────────────────────
+
+def parse_course_per_file(course_dir: Path, cfg: dict, args) -> dict:
+    """Each PDF becomes one module; all its pages form one section."""
+    course_id   = cfg.get("id",     course_dir.name)
+    course_name = cfg.get("name",   course_dir.name.replace("-", " ").title())
+    author      = cfg.get("author", "")
+    file_names  = cfg.get("file_names", {})   # stem → display name overrides
+    verbose     = args.verbose
+    dpi         = args.dpi
+    quality     = args.quality
+
+    slide_dir = DOCS_DIR / "slides" / course_id
+    slide_dir.mkdir(parents=True, exist_ok=True)
+
+    pdfs = sorted(course_dir.glob("*.pdf"))
+    if not pdfs:
+        print(f"  No PDFs in {course_dir}", file=sys.stderr)
+        return {"id": course_id, "name": course_name, "author": author, "modules": []}
+
+    modules: list[dict] = []
+    global_idx = 0
+
+    for mod_num, pdf_path in enumerate(pdfs, start=1):
+        stem  = pdf_path.stem
+        title = file_names.get(stem, clean_stem(stem))
+        doc   = fitz.open(str(pdf_path))
+
+        if verbose:
+            print(f"  [{mod_num}] {title}  ← {pdf_path.name} ({len(doc)} pages)")
+
+        slides: list[str] = []
+        for page in doc:
+            global_idx += 1
+            img_name = f"page_{global_idx:04d}.jpg"
+            img_path = slide_dir / img_name
+            render_page(page, img_path, dpi, quality)
+            slides.append(f"slides/{course_id}/{img_name}")
+
+        doc.close()
+
+        modules.append({
+            "id":          f"mod{mod_num}",
+            "number":      mod_num,
+            "title":       title,
+            "duration":    "",
+            "agenda_slide": slides[0] if slides else "",
+            "sections": [{
+                "id":     f"s{mod_num}_0",
+                "number": str(mod_num),
+                "title":  title,
+                "slides": slides,
+            }],
+        })
+
+    total = sum(len(m["sections"][0]["slides"]) for m in modules)
+    print(f"  {course_name}: {len(modules)} modules, {total} slides → {slide_dir}")
+    return {"id": course_id, "name": course_name, "author": author, "modules": modules}
+
+
 # ── Course parsing ─────────────────────────────────────────────────────────
 
 def parse_course(course_dir: Path, cfg: dict, args) -> dict:
@@ -378,7 +448,10 @@ def main():
         cfg    = load_config(course_dir)
         cid    = cfg.get("id", course_dir.name)
         print(f"\nProcessing: {cfg.get('name', course_dir.name)}")
-        course = parse_course(course_dir, cfg, args)
+        if cfg.get("structure") == "per_file":
+            course = parse_course_per_file(course_dir, cfg, args)
+        else:
+            course = parse_course(course_dir, cfg, args)
         existing[cid] = course
 
     OUT_JSON.parent.mkdir(parents=True, exist_ok=True)
