@@ -41,7 +41,14 @@
                 "slides/course2/page_0022.jpg",
                 "slides/course2/page_0023.jpg",
                 "slides/course2/page_0024.jpg",
-                "slides/course2/page_0025.jpg",
+                "slides/course2/page_0025.jpg"
+              ]
+            },
+            {
+              "id": "mod1_sum",
+              "number": "summary",
+              "title": "📝 Summary",
+              "slides": [
                 "slides/course2/summary_mod1.jpg"
               ]
             }
@@ -110,7 +117,14 @@
                 "slides/course2/page_0074.jpg",
                 "slides/course2/page_0075.jpg",
                 "slides/course2/page_0076.jpg",
-                "slides/course2/page_0077.jpg",
+                "slides/course2/page_0077.jpg"
+              ]
+            },
+            {
+              "id": "mod2_sum",
+              "number": "summary",
+              "title": "📝 Summary",
+              "slides": [
                 "slides/course2/summary_mod2.jpg"
               ]
             }
@@ -156,7 +170,14 @@
                 "slides/course2/page_0103.jpg",
                 "slides/course2/page_0104.jpg",
                 "slides/course2/page_0105.jpg",
-                "slides/course2/page_0106.jpg",
+                "slides/course2/page_0106.jpg"
+              ]
+            },
+            {
+              "id": "mod3_sum",
+              "number": "summary",
+              "title": "📝 Summary",
+              "slides": [
                 "slides/course2/summary_mod3.jpg"
               ]
             }
@@ -202,7 +223,14 @@
                 "slides/course2/page_0132.jpg",
                 "slides/course2/page_0133.jpg",
                 "slides/course2/page_0134.jpg",
-                "slides/course2/page_0135.jpg",
+                "slides/course2/page_0135.jpg"
+              ]
+            },
+            {
+              "id": "mod4_sum",
+              "number": "summary",
+              "title": "📝 Summary",
+              "slides": [
                 "slides/course2/summary_mod4.jpg"
               ]
             }
@@ -247,7 +275,14 @@
                 "slides/course2/page_0160.jpg",
                 "slides/course2/page_0161.jpg",
                 "slides/course2/page_0162.jpg",
-                "slides/course2/page_0163.jpg",
+                "slides/course2/page_0163.jpg"
+              ]
+            },
+            {
+              "id": "mod5_sum",
+              "number": "summary",
+              "title": "📝 Summary",
+              "slides": [
                 "slides/course2/summary_mod5.jpg"
               ]
             }
@@ -283,7 +318,14 @@
                 "slides/course2/page_0179.jpg",
                 "slides/course2/page_0180.jpg",
                 "slides/course2/page_0181.jpg",
-                "slides/course2/page_0182.jpg",
+                "slides/course2/page_0182.jpg"
+              ]
+            },
+            {
+              "id": "mod6_sum",
+              "number": "summary",
+              "title": "📝 Summary",
+              "slides": [
                 "slides/course2/summary_mod6.jpg"
               ]
             }
@@ -318,7 +360,14 @@
                 "slides/course2/page_0197.jpg",
                 "slides/course2/page_0198.jpg",
                 "slides/course2/page_0199.jpg",
-                "slides/course2/page_0200.jpg",
+                "slides/course2/page_0200.jpg"
+              ]
+            },
+            {
+              "id": "mod7_sum",
+              "number": "summary",
+              "title": "📝 Summary",
+              "slides": [
                 "slides/course2/summary_mod7.jpg"
               ]
             }
@@ -363,7 +412,14 @@
                 "slides/course2/page_0225.jpg",
                 "slides/course2/page_0226.jpg",
                 "slides/course2/page_0227.jpg",
-                "slides/course2/page_0228.jpg",
+                "slides/course2/page_0228.jpg"
+              ]
+            },
+            {
+              "id": "mod8_sum",
+              "number": "summary",
+              "title": "📝 Summary",
+              "slides": [
                 "slides/course2/summary_mod8.jpg"
               ]
             }
@@ -383,7 +439,14 @@
               "slides": [
                 "slides/course2/page_0229.jpg",
                 "slides/course2/page_0230.jpg",
-                "slides/course2/page_0231.jpg",
+                "slides/course2/page_0231.jpg"
+              ]
+            },
+            {
+              "id": "mod9_sum",
+              "number": "summary",
+              "title": "📝 Summary",
+              "slides": [
                 "slides/course2/summary_mod9.jpg"
               ]
             }
@@ -420,7 +483,14 @@
                 "slides/course2/page_0248.jpg",
                 "slides/course2/page_0249.jpg",
                 "slides/course2/page_0250.jpg",
-                "slides/course2/page_0251.jpg",
+                "slides/course2/page_0251.jpg"
+              ]
+            },
+            {
+              "id": "mod10_sum",
+              "number": "summary",
+              "title": "📝 Summary",
+              "slides": [
                 "slides/course2/summary_mod10.jpg"
               ]
             }
@@ -447,7 +517,14 @@
               "slides": [
                 "slides/course1/page_0002.jpg",
                 "slides/course1/page_0003.jpg",
-                "slides/course1/page_0004.jpg",
+                "slides/course1/page_0004.jpg"
+              ]
+            },
+            {
+              "id": "mod0_sum",
+              "number": "summary",
+              "title": "📝 Summary",
+              "slides": [
                 "slides/course1/summary_mod0.jpg"
               ]
             }
@@ -490,14 +567,7 @@
                 "slides/course1/page_0030.jpg",
                 "slides/course1/page_0031.jpg",
                 "slides/course1/page_0032.jpg",
-                "slides/course1/page_0033.jpg"
-              ]
-            },
-            {
-              "id": "s1_1",
-              "number": "1.1",
-              "title": "Introductions",
-              "slides": [
+                "slides/course1/page_0033.jpg",
                 "slides/course1/page_0006.jpg",
                 "slides/course1/page_0007.jpg",
                 "slides/course1/page_0008.jpg",
@@ -523,7 +593,14 @@
                 "slides/course1/page_0030.jpg",
                 "slides/course1/page_0031.jpg",
                 "slides/course1/page_0032.jpg",
-                "slides/course1/page_0033.jpg",
+                "slides/course1/page_0033.jpg"
+              ]
+            },
+            {
+              "id": "mod1_sum",
+              "number": "summary",
+              "title": "📝 Summary",
+              "slides": [
                 "slides/course1/summary_mod1.jpg"
               ]
             }
@@ -587,14 +664,7 @@
                 "slides/course1/page_0080.jpg",
                 "slides/course1/page_0081.jpg",
                 "slides/course1/page_0082.jpg",
-                "slides/course1/page_0083.jpg"
-              ]
-            },
-            {
-              "id": "s2_1",
-              "number": "2.1",
-              "title": "ML Fundamentals",
-              "slides": [
+                "slides/course1/page_0083.jpg",
                 "slides/course1/page_0037.jpg",
                 "slides/course1/page_0038.jpg",
                 "slides/course1/page_0039.jpg",
@@ -641,7 +711,14 @@
                 "slides/course1/page_0080.jpg",
                 "slides/course1/page_0081.jpg",
                 "slides/course1/page_0082.jpg",
-                "slides/course1/page_0083.jpg",
+                "slides/course1/page_0083.jpg"
+              ]
+            },
+            {
+              "id": "mod2_sum",
+              "number": "summary",
+              "title": "📝 Summary",
+              "slides": [
                 "slides/course1/summary_mod2.jpg"
               ]
             }
@@ -724,14 +801,7 @@
                 "slides/course1/page_0147.jpg",
                 "slides/course1/page_0148.jpg",
                 "slides/course1/page_0149.jpg",
-                "slides/course1/page_0150.jpg"
-              ]
-            },
-            {
-              "id": "s3_1",
-              "number": "3.1",
-              "title": "From Traditional ML to GenAI Attacks",
-              "slides": [
+                "slides/course1/page_0150.jpg",
                 "slides/course1/page_0085.jpg",
                 "slides/course1/page_0086.jpg",
                 "slides/course1/page_0087.jpg",
@@ -797,7 +867,14 @@
                 "slides/course1/page_0147.jpg",
                 "slides/course1/page_0148.jpg",
                 "slides/course1/page_0149.jpg",
-                "slides/course1/page_0150.jpg",
+                "slides/course1/page_0150.jpg"
+              ]
+            },
+            {
+              "id": "mod3_sum",
+              "number": "summary",
+              "title": "📝 Summary",
+              "slides": [
                 "slides/course1/summary_mod3.jpg"
               ]
             }
@@ -880,14 +957,7 @@
                 "slides/course1/page_0200.jpg",
                 "slides/course1/page_0201.jpg",
                 "slides/course1/page_0202.jpg",
-                "slides/course1/page_0204.jpg"
-              ]
-            },
-            {
-              "id": "s4_5",
-              "number": "4.5",
-              "title": "OpenClaw",
-              "slides": [
+                "slides/course1/page_0204.jpg",
                 "slides/course1/page_0170.jpg",
                 "slides/course1/page_0171.jpg",
                 "slides/course1/page_0172.jpg",
@@ -921,7 +991,14 @@
                 "slides/course1/page_0200.jpg",
                 "slides/course1/page_0201.jpg",
                 "slides/course1/page_0202.jpg",
-                "slides/course1/page_0204.jpg",
+                "slides/course1/page_0204.jpg"
+              ]
+            },
+            {
+              "id": "mod4_sum",
+              "number": "summary",
+              "title": "📝 Summary",
+              "slides": [
                 "slides/course1/summary_mod4.jpg"
               ]
             }
@@ -1046,44 +1123,7 @@
                 "slides/course1/page_0281.jpg",
                 "slides/course1/page_0282.jpg",
                 "slides/course1/page_0283.jpg",
-                "slides/course1/page_0284.jpg"
-              ]
-            },
-            {
-              "id": "s5_7",
-              "number": "5.7",
-              "title": "PyRIT Lab",
-              "slides": [
-                "slides/course1/page_0234.jpg",
-                "slides/course1/page_0235.jpg",
-                "slides/course1/page_0236.jpg",
-                "slides/course1/page_0237.jpg",
-                "slides/course1/page_0238.jpg",
-                "slides/course1/page_0239.jpg",
-                "slides/course1/page_0240.jpg",
-                "slides/course1/page_0241.jpg",
-                "slides/course1/page_0242.jpg",
-                "slides/course1/page_0243.jpg",
-                "slides/course1/page_0244.jpg",
-                "slides/course1/page_0248.jpg",
-                "slides/course1/page_0249.jpg",
-                "slides/course1/page_0275.jpg",
-                "slides/course1/page_0276.jpg",
-                "slides/course1/page_0277.jpg",
-                "slides/course1/page_0278.jpg",
-                "slides/course1/page_0279.jpg",
-                "slides/course1/page_0280.jpg",
-                "slides/course1/page_0281.jpg",
-                "slides/course1/page_0282.jpg",
-                "slides/course1/page_0283.jpg",
-                "slides/course1/page_0284.jpg"
-              ]
-            },
-            {
-              "id": "s5_7",
-              "number": "5.7",
-              "title": "PyRIT Lab",
-              "slides": [
+                "slides/course1/page_0284.jpg",
                 "slides/course1/page_0234.jpg",
                 "slides/course1/page_0235.jpg",
                 "slides/course1/page_0236.jpg",
@@ -1107,6 +1147,36 @@
                 "slides/course1/page_0282.jpg",
                 "slides/course1/page_0283.jpg",
                 "slides/course1/page_0284.jpg",
+                "slides/course1/page_0234.jpg",
+                "slides/course1/page_0235.jpg",
+                "slides/course1/page_0236.jpg",
+                "slides/course1/page_0237.jpg",
+                "slides/course1/page_0238.jpg",
+                "slides/course1/page_0239.jpg",
+                "slides/course1/page_0240.jpg",
+                "slides/course1/page_0241.jpg",
+                "slides/course1/page_0242.jpg",
+                "slides/course1/page_0243.jpg",
+                "slides/course1/page_0244.jpg",
+                "slides/course1/page_0248.jpg",
+                "slides/course1/page_0249.jpg",
+                "slides/course1/page_0275.jpg",
+                "slides/course1/page_0276.jpg",
+                "slides/course1/page_0277.jpg",
+                "slides/course1/page_0278.jpg",
+                "slides/course1/page_0279.jpg",
+                "slides/course1/page_0280.jpg",
+                "slides/course1/page_0281.jpg",
+                "slides/course1/page_0282.jpg",
+                "slides/course1/page_0283.jpg",
+                "slides/course1/page_0284.jpg"
+              ]
+            },
+            {
+              "id": "mod5_sum",
+              "number": "summary",
+              "title": "📝 Summary",
+              "slides": [
                 "slides/course1/summary_mod5.jpg"
               ]
             }
@@ -1118,7 +1188,16 @@
           "title": "Module 6",
           "duration": null,
           "agenda_slide": "slides/course1/page_0285.jpg",
-          "sections": []
+          "sections": [
+            {
+              "id": "mod6_sum",
+              "number": "summary",
+              "title": "📝 Summary",
+              "slides": [
+                "slides/course1/summary_mod6.jpg"
+              ]
+            }
+          ]
         },
         {
           "id": "mod7",
@@ -1209,14 +1288,7 @@
                 "slides/course1/page_0389.jpg",
                 "slides/course1/page_0390.jpg",
                 "slides/course1/page_0391.jpg",
-                "slides/course1/page_0392.jpg"
-              ]
-            },
-            {
-              "id": "s7_1",
-              "number": "7.1",
-              "title": "The Road to ChatGPT and MMMs",
-              "slides": [
+                "slides/course1/page_0392.jpg",
                 "slides/course1/page_0315.jpg",
                 "slides/course1/page_0316.jpg",
                 "slides/course1/page_0317.jpg",
@@ -1294,7 +1366,14 @@
                 "slides/course1/page_0389.jpg",
                 "slides/course1/page_0390.jpg",
                 "slides/course1/page_0391.jpg",
-                "slides/course1/page_0392.jpg",
+                "slides/course1/page_0392.jpg"
+              ]
+            },
+            {
+              "id": "mod7_sum",
+              "number": "summary",
+              "title": "📝 Summary",
+              "slides": [
                 "slides/course1/summary_mod7.jpg"
               ]
             }
@@ -1350,14 +1429,7 @@
                 "slides/course1/page_0429.jpg",
                 "slides/course1/page_0430.jpg",
                 "slides/course1/page_0431.jpg",
-                "slides/course1/page_0432.jpg"
-              ]
-            },
-            {
-              "id": "s8_1",
-              "number": "8.1",
-              "title": "Responsible AI (RAI)",
-              "slides": [
+                "slides/course1/page_0432.jpg",
                 "slides/course1/page_0394.jpg",
                 "slides/course1/page_0395.jpg",
                 "slides/course1/page_0396.jpg",
@@ -1396,7 +1468,14 @@
                 "slides/course1/page_0429.jpg",
                 "slides/course1/page_0430.jpg",
                 "slides/course1/page_0431.jpg",
-                "slides/course1/page_0432.jpg",
+                "slides/course1/page_0432.jpg"
+              ]
+            },
+            {
+              "id": "mod8_sum",
+              "number": "summary",
+              "title": "📝 Summary",
+              "slides": [
                 "slides/course1/summary_mod8.jpg"
               ]
             }
@@ -1437,14 +1516,7 @@
                 "slides/course1/page_0454.jpg",
                 "slides/course1/page_0455.jpg",
                 "slides/course1/page_0456.jpg",
-                "slides/course1/page_0457.jpg"
-              ]
-            },
-            {
-              "id": "s9_1",
-              "number": "9.1",
-              "title": "Defense-in-Depth for AI Systems",
-              "slides": [
+                "slides/course1/page_0457.jpg",
                 "slides/course1/page_0434.jpg",
                 "slides/course1/page_0435.jpg",
                 "slides/course1/page_0436.jpg",
@@ -1468,7 +1540,14 @@
                 "slides/course1/page_0454.jpg",
                 "slides/course1/page_0455.jpg",
                 "slides/course1/page_0456.jpg",
-                "slides/course1/page_0457.jpg",
+                "slides/course1/page_0457.jpg"
+              ]
+            },
+            {
+              "id": "mod9_sum",
+              "number": "summary",
+              "title": "📝 Summary",
+              "slides": [
                 "slides/course1/summary_mod9.jpg"
               ]
             }
@@ -1510,14 +1589,7 @@
                 "slides/course1/page_0483.jpg",
                 "slides/course1/page_0484.jpg",
                 "slides/course1/page_0485.jpg",
-                "slides/course1/page_0486.jpg"
-              ]
-            },
-            {
-              "id": "s10_1",
-              "number": "10.1",
-              "title": "AI x Science",
-              "slides": [
+                "slides/course1/page_0486.jpg",
                 "slides/course1/page_0459.jpg",
                 "slides/course1/page_0460.jpg",
                 "slides/course1/page_0461.jpg",
@@ -1542,7 +1614,14 @@
                 "slides/course1/page_0483.jpg",
                 "slides/course1/page_0484.jpg",
                 "slides/course1/page_0485.jpg",
-                "slides/course1/page_0486.jpg",
+                "slides/course1/page_0486.jpg"
+              ]
+            },
+            {
+              "id": "mod10_sum",
+              "number": "summary",
+              "title": "📝 Summary",
+              "slides": [
                 "slides/course1/summary_mod10.jpg"
               ]
             }

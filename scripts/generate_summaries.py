@@ -589,7 +589,8 @@ def main():
             rel_path  = f"slides/{cid}/{img_name}"
             img_path  = slide_dir / img_name
 
-            already = any(rel_path in s.get("slides", []) for s in mod["sections"])
+            sum_sec = next((s for s in mod["sections"] if s.get("number") == "summary"), None)
+            already = sum_sec is not None and sum_sec.get("slides")
             if already and not args.force:
                 print(f"  [skip] {mod_id}: {mod_title}")
                 continue
@@ -616,11 +617,16 @@ def main():
             render_summary_slide(mod_title, summary, img_path)
             print(f"    → {img_path.name}")
 
-            # Append to last section (remove old if force)
-            last_sec = mod["sections"][-1] if mod["sections"] else None
-            if last_sec:
-                last_sec["slides"] = [s for s in last_sec["slides"] if "summary_" not in s]
-                last_sec["slides"].append(rel_path)
+            # Create or update dedicated "📝 Summary" section (always last)
+            if sum_sec:
+                sum_sec["slides"] = [rel_path]
+            else:
+                mod["sections"].append({
+                    "id":     f"{mod_id}_sum",
+                    "number": "summary",
+                    "title":  "📝 Summary",
+                    "slides": [rel_path],
+                })
             changed = True
 
     if changed:

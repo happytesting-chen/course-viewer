@@ -43,6 +43,7 @@ MODULE_RE       = re.compile(r'\bModule\s+(\d+)\b', re.I)
 DURATION_RE     = re.compile(r'(\d+)\s*min', re.I)
 SECTION_LIST_RE = re.compile(r'^[-•➤]?\s*(\d+\.\d+)\s*[:\-\s]\s*(.+)')
 SECTION_TITLE_RE= re.compile(r'^(\d+\.\d+)[\s:]+(.*)')
+SUMMARY_RE      = re.compile(r'\bsummary\b', re.I)
 
 
 # ── Text helpers ───────────────────────────────────────────────────────────
@@ -119,6 +120,11 @@ def classify(lines: list[str]) -> tuple[str, dict]:
             "sections": sections,
         }
 
+    # ── Summary slide detection ───────────────────────────────────────────
+    # Triggered when "Summary" appears in the first 2 non-footer lines
+    if any(SUMMARY_RE.search(l) for l in lines[:2]):
+        return "summary", {}
+
     # ── Section title detection ───────────────────────────────────────────
     m = SECTION_TITLE_RE.match(lines[0])
     if m:
@@ -187,18 +193,30 @@ def parse_course_per_file(course_dir: Path, cfg: dict, args) -> dict:
 
         doc.close()
 
+        mod_id = f"mod{mod_num}"
+        sections = [{
+            "id":     f"s{mod_num}_0",
+            "number": str(mod_num),
+            "title":  title,
+            "slides": slides,
+        }]
+        # Attach generated summary slide if it exists
+        summary_img = slide_dir / f"summary_{mod_id}.jpg"
+        if summary_img.exists():
+            sections.append({
+                "id":     f"{mod_id}_sum",
+                "number": "summary",
+                "title":  "📝 Summary",
+                "slides": [f"slides/{course_id}/summary_{mod_id}.jpg"],
+            })
+
         modules.append({
-            "id":          f"mod{mod_num}",
+            "id":          mod_id,
             "number":      mod_num,
             "title":       title,
             "duration":    "",
             "agenda_slide": slides[0] if slides else "",
-            "sections": [{
-                "id":     f"s{mod_num}_0",
-                "number": str(mod_num),
-                "title":  title,
-                "slides": slides,
-            }],
+            "sections":    sections,
         })
 
     total = sum(len(m["sections"][0]["slides"]) for m in modules)
@@ -265,6 +283,9 @@ def parse_course(course_dir: Path, cfg: dict, args) -> dict:
     cur_sec:  dict | None = None
     pre_agenda_done = False
 
+    def mod_title_for_log(mod):
+        return mod.get("title", "") if mod else ""
+
     def flush_sec():
         nonlocal cur_sec
         if cur_sec and cur_mod is not None:
@@ -275,8 +296,17 @@ def parse_course(course_dir: Path, cfg: dict, args) -> dict:
         nonlocal cur_mod
         flush_sec()
         if cur_mod:
-            # drop sections with no slides
-            cur_mod["sections"] = [s for s in cur_mod["sections"] if s["slides"]]
+            # Dedup sections by number — merge slides from duplicates into first occurrence
+            seen: dict[str, dict] = {}
+            deduped: list[dict] = []
+            for sec in cur_mod["sections"]:
+                n = sec["number"]
+                if n in seen:
+                    seen[n]["slides"].extend(sec["slides"])
+                else:
+                    seen[n] = sec
+                    deduped.append(sec)
+            cur_mod["sections"] = [s for s in deduped if s["slides"]]
             if cur_mod["sections"] or cur_mod.get("agenda_slide"):
                 modules.append(cur_mod)
         cur_mod = None
@@ -357,6 +387,26 @@ def parse_course(course_dir: Path, cfg: dict, args) -> dict:
             cur_sec["slides"].append(rel_path)
             continue
 
+        if role == "summary":
+            if cur_mod is None:
+                preamble_slides.append(rel_path)
+                continue
+            # Find or create the dedicated Summary section
+            sum_sec = next((s for s in cur_mod["sections"] if s["number"] == "summary"), None)
+            if sum_sec is None:
+                sum_sec = {
+                    "id":     f"{cur_mod['id']}_sum",
+                    "number": "summary",
+                    "title":  "📝 Summary",
+                    "slides": [],
+                }
+                cur_mod["sections"].append(sum_sec)
+            sum_sec["slides"].append(rel_path)
+            cur_sec = sum_sec
+            if verbose:
+                print(f"    p{entry['idx']:04d} [SUMMARY] {mod_title_for_log(cur_mod)}")
+            continue
+
         # Content slide
         if cur_mod is None:
             preamble_slides.append(rel_path)
@@ -366,6 +416,18 @@ def parse_course(course_dir: Path, cfg: dict, args) -> dict:
             cur_mod["sections"][-1]["slides"].append(rel_path)
 
     flush_mod()
+
+    # Add fallback "📝 Summary" section for modules without a detected summary slide
+    for mod in modules:
+        if not any(s["number"] == "summary" for s in mod["sections"]):
+            fallback_img = slide_dir / f"summary_{mod['id']}.jpg"
+            if fallback_img.exists():
+                mod["sections"].append({
+                    "id":     f"{mod['id']}_sum",
+                    "number": "summary",
+                    "title":  "📝 Summary",
+                    "slides": [f"slides/{course_id}/summary_{mod['id']}.jpg"],
+                })
 
     # Add preamble as Module 0 if it has slides
     if preamble_slides:
