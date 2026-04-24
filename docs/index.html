@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Black Hat Training Viewer</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+
+  <!-- ── Top bar ─────────────────────────────────────────────── -->
+  <header id="topbar">
+    <span id="site-brand">Training Viewer</span>
+
+    <nav id="course-tabs" role="tablist"></nav>
+
+    <div id="search-wrap">
+      <svg id="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="2.5">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input id="search-input" type="search" placeholder="Search modules & sections…" autocomplete="off"/>
+    </div>
+
+    <button id="theme-btn" title="Toggle dark/light mode">☾</button>
+  </header>
+
+  <!-- ── Layout ──────────────────────────────────────────────── -->
+  <div id="layout">
+
+    <!-- Sidebar -->
+    <nav id="sidebar">
+      <button id="sidebar-close" aria-label="Close sidebar">✕</button>
+      <div id="nav-tree"></div>
+    </nav>
+
+    <!-- Slide panel -->
+    <main id="main">
+      <button id="sidebar-open" aria-label="Open sidebar">☰</button>
+
+      <div id="viewer">
+        <div id="slide-wrap">
+          <img id="slide-img" src="" alt="Slide" />
+          <div id="slide-placeholder">
+            <p>Select a module or section from the sidebar to begin.</p>
+          </div>
+        </div>
+
+        <div id="controls">
+          <button id="btn-prev" disabled>◀ Prev</button>
+          <span id="slide-counter">—</span>
+          <button id="btn-next" disabled>Next ▶</button>
+        </div>
+      </div>
+
+      <!-- Search results overlay -->
+      <div id="search-results" hidden>
+        <h2>Search results</h2>
+        <div id="search-list"></div>
+      </div>
+    </main>
+
+  </div>
+
+  <!-- Fullscreen overlay -->
+  <div id="fullscreen-overlay" hidden>
+    <button id="fs-close">✕</button>
+    <img id="fs-img" src="" alt="Slide fullscreen" />
+    <div id="fs-controls">
+      <button id="fs-prev">◀</button>
+      <span id="fs-counter"></span>
+      <button id="fs-next">▶</button>
+    </div>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>

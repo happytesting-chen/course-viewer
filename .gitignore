@@ -1,5 +1,12 @@
-# PDFs may be copyrighted — exclude them
+# PDFs are copyrighted — never commit them
 pdfs/
+
+# Raw OCR text cache
+raw/
+
+# docs/slides/ contains generated images — DO commit these for GitHub Pages
+# (they are the site content, not source material)
+!docs/slides/
 
 # Python
 __pycache__/
