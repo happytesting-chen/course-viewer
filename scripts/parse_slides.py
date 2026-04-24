@@ -414,6 +414,15 @@ def parse_course(course_dir: Path, cfg: dict, args) -> dict:
             cur_sec["slides"].append(rel_path)
         elif cur_mod["sections"]:
             cur_mod["sections"][-1]["slides"].append(rel_path)
+        else:
+            # Module has no sections yet — create a default one so slides aren't lost
+            cur_sec = {
+                "id":     f"s{cur_mod['number']}_1",
+                "number": f"{cur_mod['number']}.1",
+                "title":  cur_mod["title"],
+                "slides": [rel_path],
+            }
+            cur_mod["sections"].append(cur_sec)
 
     flush_mod()
 
