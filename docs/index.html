@@ -135,20 +135,39 @@
 
     function unlock() { gate.style.display = "none"; }
 
-    if (sessionStorage.getItem(SESSION_KEY) === "1") { unlock(); }
+    if (sessionStorage.getItem(SESSION_KEY)) { unlock(); }
 
-    function attempt() {
-      const pwd = (typeof window.SITE_PASSWORD !== "undefined") ? window.SITE_PASSWORD : "";
-      if (input.value === pwd) {
-        sessionStorage.setItem(SESSION_KEY, "1");
-        unlock();
-      } else {
+    async function attempt() {
+      const password = input.value;
+      if (!password) return;
+      submit.disabled = true;
+      errMsg.hidden = true;
+
+      const proxyUrl = (typeof window.PROXY_URL !== "undefined") ? window.PROXY_URL : "";
+      const authUrl  = proxyUrl.replace("/api/chat", "/api/auth");
+
+      try {
+        const res = await fetch(authUrl, {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ password }),
+        });
+        if (res.ok) {
+          const { token } = await res.json();
+          sessionStorage.setItem(SESSION_KEY, token);
+          unlock();
+        } else {
+          errMsg.hidden = false;
+          input.value = "";
+          input.focus();
+          gate.querySelector("#pw-box").classList.add("shake");
+          setTimeout(() => gate.querySelector("#pw-box").classList.remove("shake"), 500);
+        }
+      } catch (err) {
+        errMsg.textContent = "Connection error. Please try again.";
         errMsg.hidden = false;
-        input.value = "";
-        input.focus();
-        gate.querySelector("#pw-box").classList.add("shake");
-        setTimeout(() => gate.querySelector("#pw-box").classList.remove("shake"), 500);
       }
+      submit.disabled = false;
     }
 
     forgotBtn.addEventListener("click", () => {

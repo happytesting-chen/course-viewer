@@ -352,8 +352,8 @@ async function sendMessage() {
 
   const aiDiv = appendMessage("assistant", "…");
 
-  const proxyUrl   = (typeof window.PROXY_URL        !== "undefined") ? window.PROXY_URL        : "";
-  const proxyToken = (typeof window.PROXY_AUTH_TOKEN  !== "undefined") ? window.PROXY_AUTH_TOKEN : "";
+  const proxyUrl   = (typeof window.PROXY_URL !== "undefined") ? window.PROXY_URL : "";
+  const proxyToken = sessionStorage.getItem("bhviewer_auth") || "";
   if (!proxyUrl) {
     aiDiv.textContent = "Proxy not configured. Set PROXY_URL in config.js.";
     chatInput.disabled = false;
