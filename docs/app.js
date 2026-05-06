@@ -31,12 +31,14 @@ const sbClose        = D("sidebar-close");
 const aboutPanel      = D("about-panel");
 const aboutCourseName = D("about-course-name");
 const aboutPara1      = D("about-para1");
+const contentRow      = D("content-row");
 const chatPanel       = D("chat-panel");
 const chatCourseName  = D("chat-course-name");
 const chatMessages    = D("chat-messages");
 const chatInput       = D("chat-input");
 const chatSend        = D("chat-send");
 const chatClear       = D("chat-clear");
+const chatClose       = D("chat-close");
 const askAiBtn        = D("ask-ai-btn");
 
 // ── Theme ──────────────────────────────────────────────────────────────────
@@ -280,7 +282,8 @@ D("fs-next").addEventListener("click", () => navigate(+1));
 // ── About panel ────────────────────────────────────────────────────────────
 function showAbout() {
   hideSearch();
-  viewer.style.display = "none";
+  hideChat();
+  contentRow.hidden = true;
   aboutCourseName.textContent = curCourse.name;
   aboutPara1.textContent = curCourse.summary || "";
   aboutPanel.hidden = false;
@@ -288,7 +291,7 @@ function showAbout() {
 
 function hideAbout() {
   aboutPanel.hidden = true;
-  viewer.style.display = "";
+  contentRow.hidden = false;
 }
 
 // ── Ask AI ─────────────────────────────────────────────────────────────────
@@ -316,7 +319,6 @@ function buildCourseContext() {
 function showChat() {
   hideSearch();
   hideAbout();
-  viewer.style.display = "none";
   chatCourseName.textContent = curCourse?.name || "";
   chatPanel.hidden = false;
   askAiBtn.classList.add("active");
@@ -325,7 +327,6 @@ function showChat() {
 
 function hideChat() {
   chatPanel.hidden = true;
-  viewer.style.display = "";
   askAiBtn.classList.remove("active");
 }
 
@@ -426,11 +427,12 @@ chatClear.addEventListener("click", () => {
   chatMessages.innerHTML = "";
   chatInput.focus();
 });
+chatClose.addEventListener("click", hideChat);
 
 // ── Search ─────────────────────────────────────────────────────────────────
 function hideSearch() {
   searchRes.hidden = true;
-  viewer.style.display = "";
+  contentRow.hidden = false;
 }
 
 function doSearch(q) {
@@ -447,7 +449,7 @@ function doSearch(q) {
     });
   });
 
-  viewer.style.display = "none";
+  contentRow.hidden = true;
   searchRes.hidden = false;
   searchList.innerHTML = hits.length
     ? hits.map((h, i) => `

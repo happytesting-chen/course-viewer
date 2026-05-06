@@ -590,7 +590,7 @@
     },
     {
       "id": "course1",
-      "name": "blackhat 2026",
+      "name": "BlackHat 2026",
       "summary": "Course 1 provides a comprehensive introduction to AI red-teaming, equipping participants with the foundational knowledge, practical tools, and advanced techniques needed to identify and exploit vulnerabilities in modern AI systems. The course begins with essential setup and contextual framing before progressing through ML and GenAI fundamentals, the adversarial landscape taxonomy, and specialized coverage of agentic AI architectures that expand attack surfaces through tool use and autonomous decision-making. Participants gain hands-on experience with leading open-source red-teaming frameworks including AutoGen, Inspect AI, and PyRIT, alongside advanced exploitation techniques for both LLMs and agent systems, with dedicated modules addressing the unique risks of multi-modal models combining vision, audio, and text. The course situates these offensive capabilities within a Responsible AI framework by introducing a repeatable red-team process, surveying defence-in-depth mitigation strategies, and examining AI applications in scientific research contexts. Throughout, the training bridges the gap between understanding modern AI vulnerabilities and implementing principled, effective security testing methodologies.",
       "author": "",
       "modules": [

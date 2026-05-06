@@ -272,6 +272,12 @@ body {
   background: var(--bg);
 }
 
+#content-row {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
 #sidebar-open {
   display: none;
   position: absolute; top: .6rem; left: .75rem;
@@ -388,12 +394,15 @@ body {
   line-height: 1.75;
 }
 
-/* ── Chat panel ─────────────────────────────────────────────── */
+/* ── Chat panel (right side panel) ──────────────────────────── */
 #chat-panel {
-  flex: 1;
+  width: 360px;
+  flex-shrink: 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  border-left: 1px solid var(--border);
+  background: var(--surface);
 }
 
 #chat-header {
@@ -401,23 +410,28 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: .6rem 1.25rem;
+  padding: .6rem 1rem;
   border-bottom: 1px solid var(--border);
-  font-size: .85rem;
+  font-size: .82rem;
   font-weight: 600;
   color: var(--text-muted);
 }
 
-#chat-clear {
+#chat-header-actions {
+  display: flex;
+  gap: .4rem;
+}
+
+#chat-clear, #chat-close {
   background: none;
   border: 1px solid var(--border);
   border-radius: 5px;
   color: var(--text-muted);
   font-size: .75rem;
-  padding: .2rem .6rem;
+  padding: .2rem .5rem;
   cursor: pointer;
 }
-#chat-clear:hover { color: var(--text); border-color: var(--text-muted); }
+#chat-clear:hover, #chat-close:hover { color: var(--text); border-color: var(--text-muted); }
 
 #chat-messages {
   flex: 1;

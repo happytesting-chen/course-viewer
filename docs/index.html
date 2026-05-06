@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Training Viewer</title>
+  <title>Courses</title>
   <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
 
   <!-- ── Top bar ─────────────────────────────────────────────── -->
   <header id="topbar">
-    <span id="site-brand">Training Viewer</span>
+    <span id="site-brand">Courses</span>
 
     <nav id="course-tabs" role="tablist"></nav>
 
@@ -41,44 +41,49 @@
     <main id="main">
       <button id="sidebar-open" aria-label="Open sidebar">☰</button>
 
-      <div id="viewer">
-        <div id="slide-wrap">
-          <img id="slide-img" src="" alt="Slide" />
-          <div id="slide-placeholder">
-            <p>Select a module or section from the sidebar to begin.</p>
+      <!-- Content row: viewer + chat side by side -->
+      <div id="content-row">
+        <div id="viewer">
+          <div id="slide-wrap">
+            <img id="slide-img" src="" alt="Slide" />
+            <div id="slide-placeholder">
+              <p>Select a module or section from the sidebar to begin.</p>
+            </div>
+          </div>
+
+          <div id="controls">
+            <button id="btn-prev" disabled>◀ Prev</button>
+            <span id="slide-counter">—</span>
+            <button id="btn-next" disabled>Next ▶</button>
           </div>
         </div>
 
-        <div id="controls">
-          <button id="btn-prev" disabled>◀ Prev</button>
-          <span id="slide-counter">—</span>
-          <button id="btn-next" disabled>Next ▶</button>
+        <!-- Ask AI chat panel — slides in on the right -->
+        <div id="chat-panel" hidden>
+          <div id="chat-header">
+            <span>Ask AI — <span id="chat-course-name"></span></span>
+            <div id="chat-header-actions">
+              <button id="chat-clear" title="Clear conversation">Clear</button>
+              <button id="chat-close" title="Close">✕</button>
+            </div>
+          </div>
+          <div id="chat-messages"></div>
+          <div id="chat-input-wrap">
+            <textarea id="chat-input" placeholder="Ask a question about this course…" rows="2"></textarea>
+            <button id="chat-send">Send</button>
+          </div>
         </div>
       </div>
 
-      <!-- Search results overlay -->
+      <!-- Full-width overlay panels -->
       <div id="search-results" hidden>
         <h2>Search results</h2>
         <div id="search-list"></div>
       </div>
 
-      <!-- About this course panel -->
       <div id="about-panel" hidden>
         <h2 id="about-course-name"></h2>
         <p id="about-para1"></p>
-      </div>
-
-      <!-- Ask AI chat panel -->
-      <div id="chat-panel" hidden>
-        <div id="chat-header">
-          <span>Ask AI — <span id="chat-course-name"></span></span>
-          <button id="chat-clear" title="Clear conversation">Clear</button>
-        </div>
-        <div id="chat-messages"></div>
-        <div id="chat-input-wrap">
-          <textarea id="chat-input" placeholder="Ask a question about this course…" rows="2"></textarea>
-          <button id="chat-send">Send</button>
-        </div>
       </div>
     </main>
 
