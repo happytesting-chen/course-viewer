@@ -468,11 +468,12 @@ body {
 }
 
 .chat-cost {
-  font-size: .7rem;
-  color: var(--text-muted);
-  opacity: .55;
+  font-size: .75rem;
+  color: var(--accent);
+  opacity: .8;
   text-align: right;
-  padding: 0 .25rem .25rem;
+  padding: .1rem .25rem .5rem;
+  letter-spacing: .02em;
 }
 
 #chat-input-wrap {
