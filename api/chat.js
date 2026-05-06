@@ -1,31 +1,17 @@
-export const config = { runtime: "edge" };
+export default async function handler(req, res) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, x-auth-token");
 
-const CORS = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type, x-auth-token",
-};
+  if (req.method === "OPTIONS") return res.status(200).end();
+  if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
 
-export default async function handler(req) {
-  if (req.method === "OPTIONS") {
-    return new Response(null, { status: 200, headers: CORS });
-  }
-
-  if (req.method !== "POST") {
-    return new Response("Method not allowed", { status: 405, headers: CORS });
-  }
-
-  const authToken = req.headers.get("x-auth-token");
+  const authToken = req.headers["x-auth-token"];
   if (!process.env.PROXY_AUTH_TOKEN || authToken !== process.env.PROXY_AUTH_TOKEN) {
-    return new Response("Unauthorized", { status: 401, headers: CORS });
+    return res.status(401).json({ error: "Unauthorized" });
   }
 
-  let system, messages;
-  try {
-    ({ system, messages } = await req.json());
-  } catch {
-    return new Response("Invalid JSON", { status: 400, headers: CORS });
-  }
+  const { system, messages } = req.body;
 
   const claudeRes = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
@@ -44,13 +30,24 @@ export default async function handler(req) {
   });
 
   if (!claudeRes.ok) {
-    return new Response(`Claude API error: ${claudeRes.status}`, {
-      status: claudeRes.status,
-      headers: CORS,
-    });
+    return res.status(claudeRes.status).json({ error: `Claude API error: ${claudeRes.status}` });
   }
 
-  return new Response(claudeRes.body, {
-    headers: { ...CORS, "Content-Type": "text/event-stream", "Cache-Control": "no-cache" },
-  });
+  res.setHeader("Content-Type", "text/event-stream");
+  res.setHeader("Cache-Control", "no-cache");
+  res.setHeader("Connection", "keep-alive");
+  res.flushHeaders();
+
+  const reader = claudeRes.body.getReader();
+  const decoder = new TextDecoder();
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    res.write(decoder.decode(value, { stream: true }));
+  }
+  res.end();
 }
+
+export const config = {
+  api: { responseLimit: false },
+};
