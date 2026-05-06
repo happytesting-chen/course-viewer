@@ -337,6 +337,55 @@ body {
 .search-item .si-title { font-weight: 600; font-size: .9rem; }
 .search-item .si-path  { font-size: .78rem; color: var(--text-muted); margin-top: .15rem; }
 
+/* ── About panel ───────────────────────────────────────────── */
+#about-panel {
+  flex: 1;
+  overflow-y: auto;
+  padding: 2.5rem 3rem;
+  max-width: 720px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+#about-panel h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 1rem;
+}
+
+#about-panel p {
+  font-size: .95rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin-bottom: 2rem;
+}
+
+#about-panel h3 {
+  font-size: .85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--text-muted);
+  margin-bottom: .75rem;
+}
+
+#about-modules {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+
+#about-modules li {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: .65rem 1rem;
+  font-size: .88rem;
+  color: var(--text);
+}
+
 /* ── Fullscreen overlay ────────────────────────────────────── */
 #fullscreen-overlay {
   position: fixed; inset: 0;

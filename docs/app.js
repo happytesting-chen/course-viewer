@@ -24,9 +24,13 @@ const themeBtn    = D("theme-btn");
 const fsOverlay   = D("fullscreen-overlay");
 const fsImg       = D("fs-img");
 const fsCounter   = D("fs-counter");
-const sidebarEl   = D("sidebar");
-const sbOpen      = D("sidebar-open");
-const sbClose     = D("sidebar-close");
+const sidebarEl      = D("sidebar");
+const sbOpen         = D("sidebar-open");
+const sbClose        = D("sidebar-close");
+const aboutPanel     = D("about-panel");
+const aboutCourseName = D("about-course-name");
+const aboutSummary   = D("about-summary");
+const aboutModules   = D("about-modules");
 
 // ── Theme ──────────────────────────────────────────────────────────────────
 (function initTheme() {
@@ -167,7 +171,11 @@ function buildNav() {
     aboutBtn.innerHTML = `<span>&#9432; About this course</span>`;
     aboutBtn.addEventListener("click", () => {
       sidebarEl.classList.remove("open");
-      goTo(curCourse, null, aboutSec, 0, false);
+      curSec = aboutSec;
+      curMod = null;
+      buildTabs();
+      buildNav();
+      showAbout();
     });
     navTree.appendChild(aboutBtn);
   }
@@ -190,6 +198,7 @@ function goTo(course, mod, sec, slideIdx, updateHash = true) {
 
   buildTabs();
   buildNav();
+  hideAbout();
   renderSlide();
   scrollActiveLink();
   hideSearch();
@@ -258,6 +267,23 @@ D("fs-close").addEventListener("click", closeFs);
 fsOverlay.addEventListener("click", e => { if (e.target === fsOverlay) closeFs(); });
 D("fs-prev").addEventListener("click", () => navigate(-1));
 D("fs-next").addEventListener("click", () => navigate(+1));
+
+// ── About panel ────────────────────────────────────────────────────────────
+function showAbout() {
+  hideSearch();
+  viewer.style.display = "none";
+  aboutCourseName.textContent = curCourse.name;
+  aboutSummary.textContent = curCourse.summary || "";
+  aboutModules.innerHTML = curCourse.modules
+    .map(m => `<li><strong>${esc(m.title)}</strong></li>`)
+    .join("");
+  aboutPanel.hidden = false;
+}
+
+function hideAbout() {
+  aboutPanel.hidden = true;
+  viewer.style.display = "";
+}
 
 // ── Search ─────────────────────────────────────────────────────────────────
 function hideSearch() {
