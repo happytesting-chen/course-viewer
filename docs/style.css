@@ -358,15 +358,6 @@ body {
   font-size: .95rem;
   color: var(--text);
   line-height: 1.75;
-  margin-bottom: 1.5rem;
-}
-
-#about-para2 {
-  font-size: .9rem;
-  color: var(--text-muted);
-  line-height: 1.75;
-  border-left: 3px solid var(--accent);
-  padding-left: 1rem;
 }
 
 /* ── Fullscreen overlay ────────────────────────────────────── */

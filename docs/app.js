@@ -30,7 +30,6 @@ const sbClose        = D("sidebar-close");
 const aboutPanel      = D("about-panel");
 const aboutCourseName = D("about-course-name");
 const aboutPara1      = D("about-para1");
-const aboutPara2      = D("about-para2");
 
 // ── Theme ──────────────────────────────────────────────────────────────────
 (function initTheme() {
@@ -273,21 +272,7 @@ function showAbout() {
   hideSearch();
   viewer.style.display = "none";
   aboutCourseName.textContent = curCourse.name;
-
-  // Paragraph 1: combine every module's overview sentence into one paragraph
-  const overviews = curCourse.modules
-    .map(m => m.overview || "")
-    .filter(Boolean)
-    .join(" ");
-  aboutPara1.textContent = overviews;
-
-  // Paragraph 2: list all topics from every module
-  const allTopics = [];
-  curCourse.modules.forEach(m => (m.topics || []).forEach(t => allTopics.push(t)));
-  aboutPara2.textContent = allTopics.length
-    ? "Topics covered in this course include: " + allTopics.join("; ") + "."
-    : "";
-
+  aboutPara1.textContent = curCourse.summary || "";
   aboutPanel.hidden = false;
 }
 
