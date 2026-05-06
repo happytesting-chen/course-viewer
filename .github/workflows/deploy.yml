@@ -30,13 +30,15 @@ jobs:
           SITE_PASSWORD: ${{ secrets.SITE_PASSWORD }}
           SITE_HINT: ${{ secrets.SITE_HINT }}
           ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          PROXY_URL: ${{ secrets.PROXY_URL }}
+          PROXY_AUTH_TOKEN: ${{ secrets.PROXY_AUTH_TOKEN }}
         run: |
           {
-            echo "window.SITE_PASSWORD     = '${SITE_PASSWORD}';"
-            echo "window.SITE_HINT         = '${SITE_HINT}';"
-            echo "window.ADMIN_EMAIL       = '${ADMIN_EMAIL}';"
-            echo "window.ANTHROPIC_API_KEY = '${ANTHROPIC_API_KEY}';"
+            echo "window.SITE_PASSWORD    = '${SITE_PASSWORD}';"
+            echo "window.SITE_HINT        = '${SITE_HINT}';"
+            echo "window.ADMIN_EMAIL      = '${ADMIN_EMAIL}';"
+            echo "window.PROXY_URL        = '${PROXY_URL}';"
+            echo "window.PROXY_AUTH_TOKEN = '${PROXY_AUTH_TOKEN}';"
           } > docs/config.js
 
       - name: Upload Pages artifact

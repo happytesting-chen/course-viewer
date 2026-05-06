@@ -352,29 +352,25 @@ async function sendMessage() {
 
   const aiDiv = appendMessage("assistant", "…");
 
-  const apiKey = (typeof window.ANTHROPIC_API_KEY !== "undefined") ? window.ANTHROPIC_API_KEY : "";
-  if (!apiKey) {
-    aiDiv.textContent = "API key not configured. Add ANTHROPIC_API_KEY to config.js.";
+  const proxyUrl   = (typeof window.PROXY_URL        !== "undefined") ? window.PROXY_URL        : "";
+  const proxyToken = (typeof window.PROXY_AUTH_TOKEN  !== "undefined") ? window.PROXY_AUTH_TOKEN : "";
+  if (!proxyUrl) {
+    aiDiv.textContent = "Proxy not configured. Set PROXY_URL in config.js.";
     chatInput.disabled = false;
     chatSend.disabled = false;
     return;
   }
 
   try {
-    const res = await fetch("https://api.anthropic.com/v1/messages", {
+    const res = await fetch(proxyUrl, {
       method: "POST",
       headers: {
-        "x-api-key": apiKey,
-        "anthropic-version": "2023-06-01",
         "content-type": "application/json",
-        "anthropic-dangerous-direct-browser-access": "true",
+        "x-auth-token": proxyToken,
       },
       body: JSON.stringify({
-        model: "claude-haiku-4-5-20251001",
-        max_tokens: 1024,
         system: buildCourseContext(),
         messages: chatHistory.slice(-12),
-        stream: true,
       }),
     });
 

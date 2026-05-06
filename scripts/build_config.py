@@ -13,10 +13,11 @@ ENV_FILE  = ROOT / ".env"
 CONFIG_JS = ROOT / "docs" / "config.js"
 
 def main():
-    password = ""
-    hint = ""
+    password   = ""
+    hint       = ""
     admin_email = ""
-    api_key = ""
+    proxy_url  = ""
+    proxy_token = ""
     if ENV_FILE.exists():
         for line in ENV_FILE.read_text().splitlines():
             line = line.strip()
@@ -26,18 +27,21 @@ def main():
                 hint = line.split("=", 1)[1].strip().strip('"').strip("'")
             elif line.startswith("ADMIN_EMAIL="):
                 admin_email = line.split("=", 1)[1].strip().strip('"').strip("'")
-            elif line.startswith("ANTHROPIC_API_KEY="):
-                api_key = line.split("=", 1)[1].strip().strip('"').strip("'")
+            elif line.startswith("PROXY_URL="):
+                proxy_url = line.split("=", 1)[1].strip().strip('"').strip("'")
+            elif line.startswith("PROXY_AUTH_TOKEN="):
+                proxy_token = line.split("=", 1)[1].strip().strip('"').strip("'")
     else:
         print(f"No .env file found at {ENV_FILE}")
         print("Copy .env.example to .env and set your password.")
         return
 
     CONFIG_JS.write_text(
-        f"window.SITE_PASSWORD     = '{password}';\n"
-        f"window.SITE_HINT         = '{hint}';\n"
-        f"window.ADMIN_EMAIL       = '{admin_email}';\n"
-        f"window.ANTHROPIC_API_KEY = '{api_key}';\n"
+        f"window.SITE_PASSWORD    = '{password}';\n"
+        f"window.SITE_HINT        = '{hint}';\n"
+        f"window.ADMIN_EMAIL      = '{admin_email}';\n"
+        f"window.PROXY_URL        = '{proxy_url}';\n"
+        f"window.PROXY_AUTH_TOKEN = '{proxy_token}';\n"
     )
     print(f"Written: {CONFIG_JS}")
 
