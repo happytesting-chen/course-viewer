@@ -32,6 +32,9 @@
     <nav id="sidebar">
       <button id="sidebar-close" aria-label="Close sidebar">✕</button>
       <div id="nav-tree"></div>
+      <div id="sidebar-footer">
+        <button id="ask-ai-btn">&#128172; Ask AI</button>
+      </div>
     </nav>
 
     <!-- Slide panel -->
@@ -63,6 +66,19 @@
       <div id="about-panel" hidden>
         <h2 id="about-course-name"></h2>
         <p id="about-para1"></p>
+      </div>
+
+      <!-- Ask AI chat panel -->
+      <div id="chat-panel" hidden>
+        <div id="chat-header">
+          <span>Ask AI — <span id="chat-course-name"></span></span>
+          <button id="chat-clear" title="Clear conversation">Clear</button>
+        </div>
+        <div id="chat-messages"></div>
+        <div id="chat-input-wrap">
+          <textarea id="chat-input" placeholder="Ask a question about this course…" rows="2"></textarea>
+          <button id="chat-send">Send</button>
+        </div>
       </div>
     </main>
 

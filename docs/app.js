@@ -6,6 +6,7 @@ let curCourse    = null;   // course object
 let curMod       = null;   // module object
 let curSec       = null;   // section object
 let curSlide     = 0;      // index within section.slides
+let chatHistory  = [];     // {role, content}[] conversation turns
 
 // ── DOM ────────────────────────────────────────────────────────────────────
 const D = id => document.getElementById(id);
@@ -30,6 +31,13 @@ const sbClose        = D("sidebar-close");
 const aboutPanel      = D("about-panel");
 const aboutCourseName = D("about-course-name");
 const aboutPara1      = D("about-para1");
+const chatPanel       = D("chat-panel");
+const chatCourseName  = D("chat-course-name");
+const chatMessages    = D("chat-messages");
+const chatInput       = D("chat-input");
+const chatSend        = D("chat-send");
+const chatClear       = D("chat-clear");
+const askAiBtn        = D("ask-ai-btn");
 
 // ── Theme ──────────────────────────────────────────────────────────────────
 (function initTheme() {
@@ -195,9 +203,11 @@ function goTo(course, mod, sec, slideIdx, updateHash = true) {
   if (updateHash && course && mod && sec)
     setHash(course.id, mod.id, sec.id);
 
+  if (course !== curCourse) chatHistory = [];
   buildTabs();
   buildNav();
   hideAbout();
+  hideChat();
   renderSlide();
   scrollActiveLink();
   hideSearch();
@@ -280,6 +290,137 @@ function hideAbout() {
   aboutPanel.hidden = true;
   viewer.style.display = "";
 }
+
+// ── Ask AI ─────────────────────────────────────────────────────────────────
+function buildCourseContext() {
+  if (!curCourse) return "";
+  const lines = [
+    `You are an AI assistant for the training course "${curCourse.name}".`,
+    `Answer questions based only on the course content below. Be concise and technical.`,
+    `If a topic is not covered in the material, say so clearly.\n`,
+  ];
+  curCourse.modules.forEach(m => {
+    lines.push(`## Module ${m.number}: ${m.title}`);
+    if (m.overview) lines.push(`Overview: ${m.overview}`);
+    if (m.topics?.length) lines.push(`Topics: ${m.topics.join("; ")}`);
+    lines.push("");
+  });
+  return lines.join("\n");
+}
+
+function showChat() {
+  hideSearch();
+  hideAbout();
+  viewer.style.display = "none";
+  chatCourseName.textContent = curCourse?.name || "";
+  chatPanel.hidden = false;
+  askAiBtn.classList.add("active");
+  chatInput.focus();
+}
+
+function hideChat() {
+  chatPanel.hidden = true;
+  viewer.style.display = "";
+  askAiBtn.classList.remove("active");
+}
+
+function appendMessage(role, text) {
+  const div = document.createElement("div");
+  div.className = `chat-msg chat-${role}`;
+  div.textContent = text;
+  chatMessages.appendChild(div);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+  return div;
+}
+
+async function sendMessage() {
+  const question = chatInput.value.trim();
+  if (!question || chatSend.disabled) return;
+
+  chatInput.value = "";
+  chatInput.disabled = true;
+  chatSend.disabled = true;
+
+  appendMessage("user", question);
+  chatHistory.push({ role: "user", content: question });
+
+  const aiDiv = appendMessage("assistant", "…");
+
+  const apiKey = (typeof window.ANTHROPIC_API_KEY !== "undefined") ? window.ANTHROPIC_API_KEY : "";
+  if (!apiKey) {
+    aiDiv.textContent = "API key not configured. Add ANTHROPIC_API_KEY to config.js.";
+    chatInput.disabled = false;
+    chatSend.disabled = false;
+    return;
+  }
+
+  try {
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "x-api-key": apiKey,
+        "anthropic-version": "2023-06-01",
+        "content-type": "application/json",
+        "anthropic-dangerous-direct-browser-access": "true",
+      },
+      body: JSON.stringify({
+        model: "claude-haiku-4-5-20251001",
+        max_tokens: 1024,
+        system: buildCourseContext(),
+        messages: chatHistory.slice(-12),
+        stream: true,
+      }),
+    });
+
+    if (!res.ok) throw new Error(`API error ${res.status}`);
+
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let fullText = "";
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      for (const line of decoder.decode(value, { stream: true }).split("\n")) {
+        if (!line.startsWith("data: ")) continue;
+        const raw = line.slice(6).trim();
+        if (!raw || raw === "[DONE]") continue;
+        try {
+          const evt = JSON.parse(raw);
+          if (evt.type === "content_block_delta" && evt.delta?.type === "text_delta") {
+            fullText += evt.delta.text;
+            aiDiv.textContent = fullText;
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+          }
+        } catch {}
+      }
+    }
+
+    chatHistory.push({ role: "assistant", content: fullText });
+
+  } catch (err) {
+    aiDiv.textContent = `Error: ${err.message}`;
+  }
+
+  chatInput.disabled = false;
+  chatSend.disabled = false;
+  chatInput.focus();
+}
+
+askAiBtn.addEventListener("click", () => {
+  sidebarEl.classList.remove("open");
+  showChat();
+});
+
+chatSend.addEventListener("click", sendMessage);
+chatInput.addEventListener("keydown", e => {
+  if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+});
+chatClear.addEventListener("click", () => {
+  chatHistory = [];
+  chatMessages.innerHTML = "";
+  chatInput.focus();
+});
 
 // ── Search ─────────────────────────────────────────────────────────────────
 function hideSearch() {
