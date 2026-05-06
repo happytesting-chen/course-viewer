@@ -3,7 +3,7 @@
     {
       "id": "course2",
       "name": "Course 2",
-      "summary": "A deep dive into AI security covering large language models, supply chain security, threat modeling, AI governance, MCP security, advanced prompt injection techniques, prompt & context engineering, and guidelines for secure AI development.",
+      "summary": "Course 2 provides a comprehensive technical foundation in AI cybersecurity, beginning with the foundational concepts of the AI threat landscape and LLM architecture before progressing to practical security implementation. Participants examine the full spectrum of AI system vulnerabilities, including supply chain risks, novel attack surfaces such as Model Context Protocol, and advanced prompt injection techniques ranging from multi-turn and indirect attacks to encoding-based bypasses. The course integrates formal threat modelling methodologies—STRIDE, PASTA, and MITRE ATLAS—alongside governance frameworks and regulatory requirements to enable participants to design defensible AI systems within organisational policy constraints. Through structured prompt engineering and defensive context design, alongside red-team exercises and emerging offensive research, the course bridges theoretical knowledge with practitioner-level labs and hands-on security controls. The curriculum concludes by grounding participants in established security guidance from the NCSC and international standards, ensuring they can deploy AI systems that balance capability with robust security postures.",
       "author": "",
       "modules": [
         {
@@ -591,7 +591,7 @@
     {
       "id": "course1",
       "name": "Course 1",
-      "summary": "An introduction to AI security covering machine learning fundamentals, generative AI attacks, agentic systems and multi-agent vulnerabilities, open-source red teaming tools (AutoGen, Inspect AI, PyRIT), advanced attack techniques, multimodal models, responsible AI practices, and defense-in-depth mitigations.",
+      "summary": "Course 1 provides a comprehensive introduction to AI red-teaming, equipping participants with the foundational knowledge, practical tools, and advanced techniques needed to identify and exploit vulnerabilities in modern AI systems. The course begins with essential setup and contextual framing before progressing through ML and GenAI fundamentals, the adversarial landscape taxonomy, and specialized coverage of agentic AI architectures that expand attack surfaces through tool use and autonomous decision-making. Participants gain hands-on experience with leading open-source red-teaming frameworks including AutoGen, Inspect AI, and PyRIT, alongside advanced exploitation techniques for both LLMs and agent systems, with dedicated modules addressing the unique risks of multi-modal models combining vision, audio, and text. The course situates these offensive capabilities within a Responsible AI framework by introducing a repeatable red-team process, surveying defence-in-depth mitigation strategies, and examining AI applications in scientific research contexts. Throughout, the training bridges the gap between understanding modern AI vulnerabilities and implementing principled, effective security testing methodologies.",
       "author": "",
       "modules": [
         {
