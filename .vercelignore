@@ -1,0 +1,9 @@
+requirements.txt
+.venv/
+__pycache__/
+*.pyc
+scripts/
+pdfs/
+raw/
+site/
+docs/
