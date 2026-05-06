@@ -24,9 +24,13 @@ const themeBtn    = D("theme-btn");
 const fsOverlay   = D("fullscreen-overlay");
 const fsImg       = D("fs-img");
 const fsCounter   = D("fs-counter");
-const sidebarEl   = D("sidebar");
-const sbOpen      = D("sidebar-open");
-const sbClose     = D("sidebar-close");
+const sidebarEl        = D("sidebar");
+const sbOpen           = D("sidebar-open");
+const sbClose          = D("sidebar-close");
+const summaryWrap      = D("course-summary-wrap");
+const summaryToggle    = D("course-summary-toggle");
+const summaryBody      = D("course-summary-body");
+const summaryText      = D("course-summary-text");
 
 // ── Theme ──────────────────────────────────────────────────────────────────
 (function initTheme() {
@@ -73,6 +77,22 @@ function navigateFromHash() {
 
 window.addEventListener("hashchange", navigateFromHash);
 
+// ── Course summary ─────────────────────────────────────────────────────────
+summaryToggle.addEventListener("click", () => {
+  const open = summaryBody.hidden;
+  summaryBody.hidden = !open;
+  summaryToggle.querySelector(".caret").style.transform = open ? "rotate(90deg)" : "";
+});
+
+function buildSummary() {
+  const text = curCourse?.summary || "";
+  if (!text) { summaryWrap.hidden = true; return; }
+  summaryText.textContent = text;
+  summaryWrap.hidden = false;
+  summaryBody.hidden = true;
+  summaryToggle.querySelector(".caret").style.transform = "";
+}
+
 // ── Course tabs ────────────────────────────────────────────────────────────
 function buildTabs() {
   courseTabs.innerHTML = "";
@@ -88,6 +108,7 @@ function buildTabs() {
     });
     courseTabs.appendChild(btn);
   });
+  buildSummary();
 }
 
 // ── Sidebar nav ────────────────────────────────────────────────────────────

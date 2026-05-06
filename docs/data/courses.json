@@ -3,6 +3,7 @@
     {
       "id": "course2",
       "name": "Course 2",
+      "summary": "A deep dive into AI security covering large language models, supply chain security, threat modeling, AI governance, MCP security, advanced prompt injection techniques, prompt & context engineering, and guidelines for secure AI development.",
       "author": "",
       "modules": [
         {
@@ -501,6 +502,7 @@
     {
       "id": "course1",
       "name": "Course 1",
+      "summary": "An introduction to AI security covering machine learning fundamentals, generative AI attacks, agentic systems and multi-agent vulnerabilities, open-source red teaming tools (AutoGen, Inspect AI, PyRIT), advanced attack techniques, multimodal models, responsible AI practices, and defense-in-depth mitigations.",
       "author": "",
       "modules": [
         {

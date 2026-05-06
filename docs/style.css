@@ -150,6 +150,45 @@ body {
   font-size: 1rem; cursor: pointer; padding: .25rem .4rem;
 }
 
+/* Course summary */
+#course-summary-wrap {
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  margin-bottom: .25rem;
+}
+
+#course-summary-toggle {
+  width: 100%;
+  background: none;
+  border: none;
+  color: var(--sb-text);
+  font-size: .78rem;
+  font-weight: 600;
+  padding: .6rem 1rem .6rem 1.1rem;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  letter-spacing: .03em;
+}
+#course-summary-toggle:hover { background: var(--sb-hover); color: #fff; }
+#course-summary-toggle .caret {
+  font-size: .6rem;
+  opacity: .5;
+  margin-left: auto;
+  transition: transform .18s;
+}
+
+#course-summary-body {
+  padding: .4rem 1.1rem .8rem;
+}
+#course-summary-body p {
+  color: var(--sb-text);
+  font-size: .78rem;
+  line-height: 1.55;
+  opacity: .85;
+}
+
 /* Module toggle */
 .mod-toggle {
   width: 100%;
