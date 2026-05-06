@@ -420,6 +420,39 @@ body {
   margin-bottom: 0;
 }
 
+#pw-forgot {
+  background: none;
+  border: none;
+  color: #6b7280;
+  font-size: .8rem;
+  cursor: pointer;
+  margin-top: .9rem;
+  text-decoration: underline;
+  padding: 0;
+}
+#pw-forgot:hover { color: #9ca3af; }
+
+#pw-hint-panel {
+  margin-top: .9rem;
+  background: #0f1118;
+  border: 1px solid #2a2f42;
+  border-radius: 7px;
+  padding: .75rem 1rem;
+  text-align: left;
+}
+#pw-hint-panel p {
+  color: #9ca3af;
+  font-size: .82rem;
+  margin-bottom: .5rem;
+}
+#pw-contact {
+  display: inline-block;
+  color: var(--accent);
+  font-size: .82rem;
+  text-decoration: none;
+}
+#pw-contact:hover { text-decoration: underline; }
+
 @keyframes shake {
   0%,100% { transform: translateX(0); }
   20%,60%  { transform: translateX(-8px); }

@@ -83,6 +83,11 @@
       <input id="pw-input" type="password" placeholder="Password" autocomplete="current-password" />
       <button id="pw-submit">Enter</button>
       <p id="pw-error" hidden>Incorrect password.</p>
+      <button id="pw-forgot" type="button">Forgot password?</button>
+      <div id="pw-hint-panel" hidden>
+        <p id="pw-hint-text"></p>
+        <a id="pw-contact" href="#" target="_blank" rel="noopener">Contact Admin</a>
+      </div>
     </div>
   </div>
 
@@ -92,10 +97,14 @@
   <script>
     const SESSION_KEY = "bhviewer_auth";
 
-    const gate   = document.getElementById("pw-gate");
-    const input  = document.getElementById("pw-input");
-    const submit = document.getElementById("pw-submit");
-    const errMsg = document.getElementById("pw-error");
+    const gate       = document.getElementById("pw-gate");
+    const input      = document.getElementById("pw-input");
+    const submit     = document.getElementById("pw-submit");
+    const errMsg     = document.getElementById("pw-error");
+    const forgotBtn  = document.getElementById("pw-forgot");
+    const hintPanel  = document.getElementById("pw-hint-panel");
+    const hintText   = document.getElementById("pw-hint-text");
+    const contactLink = document.getElementById("pw-contact");
 
     function unlock() { gate.style.display = "none"; }
 
@@ -114,6 +123,20 @@
         setTimeout(() => gate.querySelector("#pw-box").classList.remove("shake"), 500);
       }
     }
+
+    forgotBtn.addEventListener("click", () => {
+      const hint  = (typeof window.SITE_HINT  !== "undefined") ? window.SITE_HINT  : "";
+      const email = (typeof window.ADMIN_EMAIL !== "undefined") ? window.ADMIN_EMAIL : "";
+      hintText.textContent = hint || "Please contact the site administrator for access.";
+      if (email) {
+        contactLink.href = "mailto:" + email + "?subject=Course%20Viewer%20-%20Password%20Request";
+        contactLink.style.display = "";
+      } else {
+        contactLink.style.display = "none";
+      }
+      hintPanel.hidden = false;
+      forgotBtn.style.display = "none";
+    });
 
     submit.addEventListener("click", attempt);
     input.addEventListener("keydown", e => { if (e.key === "Enter") attempt(); });

@@ -25,11 +25,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Inject password into config.js
+      - name: Inject config into config.js
         env:
           SITE_PASSWORD: ${{ secrets.SITE_PASSWORD }}
+          SITE_HINT: ${{ secrets.SITE_HINT }}
+          ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
         run: |
-          echo "window.SITE_PASSWORD = '${SITE_PASSWORD}';" > docs/config.js
+          {
+            echo "window.SITE_PASSWORD = '${SITE_PASSWORD}';"
+            echo "window.SITE_HINT     = '${SITE_HINT}';"
+            echo "window.ADMIN_EMAIL   = '${ADMIN_EMAIL}';"
+          } > docs/config.js
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
