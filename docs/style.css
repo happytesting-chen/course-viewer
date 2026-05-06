@@ -467,6 +467,14 @@ body {
   border-bottom-left-radius: 3px;
 }
 
+.chat-cost {
+  font-size: .7rem;
+  color: var(--text-muted);
+  opacity: .55;
+  text-align: right;
+  padding: 0 .25rem .25rem;
+}
+
 #chat-input-wrap {
   flex-shrink: 0;
   display: flex;

@@ -383,6 +383,8 @@ async function sendMessage() {
     const reader = res.body.getReader();
     const decoder = new TextDecoder();
     let fullText = "";
+    let inputTokens = 0;
+    let outputTokens = 0;
 
     while (true) {
       const { done, value } = await reader.read();
@@ -393,7 +395,11 @@ async function sendMessage() {
         if (!raw || raw === "[DONE]") continue;
         try {
           const evt = JSON.parse(raw);
-          if (evt.type === "content_block_delta" && evt.delta?.type === "text_delta") {
+          if (evt.type === "message_start") {
+            inputTokens = evt.message?.usage?.input_tokens || 0;
+          } else if (evt.type === "message_delta" && evt.usage) {
+            outputTokens = evt.usage.output_tokens || 0;
+          } else if (evt.type === "content_block_delta" && evt.delta?.type === "text_delta") {
             fullText += evt.delta.text;
             aiDiv.textContent = fullText;
             chatMessages.scrollTop = chatMessages.scrollHeight;
@@ -403,6 +409,15 @@ async function sendMessage() {
     }
 
     chatHistory.push({ role: "assistant", content: fullText });
+
+    // Show cost breakdown (Haiku: $0.80/M input, $4.00/M output)
+    const cost = (inputTokens * 0.80 + outputTokens * 4.00) / 1_000_000;
+    const costEl = document.createElement("div");
+    costEl.className = "chat-cost";
+    costEl.textContent =
+      `${inputTokens.toLocaleString()} in · ${outputTokens.toLocaleString()} out · $${cost.toFixed(5)}`;
+    chatMessages.appendChild(costEl);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
 
   } catch (err) {
     aiDiv.textContent = `Error: ${err.message}`;
