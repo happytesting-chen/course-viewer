@@ -293,17 +293,22 @@ function hideAbout() {
 
 // ── Ask AI ─────────────────────────────────────────────────────────────────
 function buildCourseContext() {
-  if (!curCourse) return "";
   const lines = [
-    `You are an AI assistant for the training course "${curCourse.name}".`,
-    `Answer questions based only on the course content below. Be concise and technical.`,
+    `You are an AI assistant for a training platform with ${COURSES.length} courses.`,
+    `Answer questions based on the course content below. Be concise and technical.`,
+    `The user is currently viewing: ${curCourse?.name || "unknown"}.`,
     `If a topic is not covered in the material, say so clearly.\n`,
   ];
-  curCourse.modules.forEach(m => {
-    lines.push(`## Module ${m.number}: ${m.title}`);
-    if (m.overview) lines.push(`Overview: ${m.overview}`);
-    if (m.topics?.length) lines.push(`Topics: ${m.topics.join("; ")}`);
+  COURSES.forEach(course => {
+    lines.push(`# ${course.name}`);
+    if (course.summary) lines.push(course.summary);
     lines.push("");
+    course.modules.forEach(m => {
+      lines.push(`## Module ${m.number}: ${m.title}`);
+      if (m.overview) lines.push(`Overview: ${m.overview}`);
+      if (m.topics?.length) lines.push(`Topics: ${m.topics.join("; ")}`);
+      lines.push("");
+    });
   });
   return lines.join("\n");
 }
