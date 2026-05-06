@@ -24,13 +24,9 @@ const themeBtn    = D("theme-btn");
 const fsOverlay   = D("fullscreen-overlay");
 const fsImg       = D("fs-img");
 const fsCounter   = D("fs-counter");
-const sidebarEl        = D("sidebar");
-const sbOpen           = D("sidebar-open");
-const sbClose          = D("sidebar-close");
-const summaryWrap      = D("course-summary-wrap");
-const summaryToggle    = D("course-summary-toggle");
-const summaryBody      = D("course-summary-body");
-const summaryText      = D("course-summary-text");
+const sidebarEl   = D("sidebar");
+const sbOpen      = D("sidebar-open");
+const sbClose     = D("sidebar-close");
 
 // ── Theme ──────────────────────────────────────────────────────────────────
 (function initTheme() {
@@ -77,22 +73,6 @@ function navigateFromHash() {
 
 window.addEventListener("hashchange", navigateFromHash);
 
-// ── Course summary ─────────────────────────────────────────────────────────
-summaryToggle.addEventListener("click", () => {
-  const open = summaryBody.hidden;
-  summaryBody.hidden = !open;
-  summaryToggle.querySelector(".caret").style.transform = open ? "rotate(90deg)" : "";
-});
-
-function buildSummary() {
-  const text = curCourse?.summary || "";
-  if (!text) { summaryWrap.hidden = true; return; }
-  summaryText.textContent = text;
-  summaryWrap.hidden = false;
-  summaryBody.hidden = true;
-  summaryToggle.querySelector(".caret").style.transform = "";
-}
-
 // ── Course tabs ────────────────────────────────────────────────────────────
 function buildTabs() {
   courseTabs.innerHTML = "";
@@ -108,7 +88,6 @@ function buildTabs() {
     });
     courseTabs.appendChild(btn);
   });
-  buildSummary();
 }
 
 // ── Sidebar nav ────────────────────────────────────────────────────────────
@@ -168,6 +147,30 @@ function buildNav() {
 
     navTree.appendChild(wrap);
   });
+
+  // "About this course" — merges all module summary slides
+  const summarySlides = [];
+  curCourse.modules.forEach(mod => {
+    mod.sections.forEach(sec => {
+      if (sec.number === "summary") summarySlides.push(...sec.slides);
+    });
+  });
+
+  if (summarySlides.length) {
+    const aboutSec = { id: "__about__", title: "About this course", slides: summarySlides };
+    const divider = document.createElement("div");
+    divider.className = "about-divider";
+    navTree.appendChild(divider);
+
+    const aboutBtn = document.createElement("button");
+    aboutBtn.className = "about-course-btn" + (curSec?.id === "__about__" ? " active" : "");
+    aboutBtn.innerHTML = `<span>&#9432; About this course</span>`;
+    aboutBtn.addEventListener("click", () => {
+      sidebarEl.classList.remove("open");
+      goTo(curCourse, null, aboutSec, 0, false);
+    });
+    navTree.appendChild(aboutBtn);
+  }
 }
 
 function scrollActiveLink() {
