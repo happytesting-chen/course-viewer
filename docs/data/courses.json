@@ -53,6 +53,14 @@
                 "slides/course2/summary_mod1.jpg"
               ]
             }
+          ],
+          "overview": "Introduces the AI cybersecurity landscape, course structure, and the dual-use nature of AI in attack and defence.",
+          "topics": [
+            "AI adoption trends and the expanding attack surface",
+            "Threat actors leveraging AI for offensive operations",
+            "Defensive AI: anomaly detection, automated response",
+            "Course roadmap: modules, labs, and learning outcomes",
+            "Key terminology: LLMs, agents, prompt injection, red-teaming"
           ]
         },
         {
@@ -129,6 +137,15 @@
                 "slides/course2/summary_mod2.jpg"
               ]
             }
+          ],
+          "overview": "Deep-dives into Large Language Model internals and the unique attack surface they create.",
+          "topics": [
+            "Transformer architecture: attention, tokens, context windows",
+            "Training pipeline: pre-training, RLHF, fine-tuning",
+            "Prompt injection: direct and indirect attack patterns",
+            "Jailbreaking techniques: role-play, encoding, many-shot",
+            "Hallucination exploitation and data poisoning risks",
+            "Model extraction and membership-inference attacks"
           ]
         },
         {
@@ -182,6 +199,15 @@
                 "slides/course2/summary_mod3.jpg"
               ]
             }
+          ],
+          "overview": "Examines security risks across the AI supply chain from training data to third-party model dependencies.",
+          "topics": [
+            "AI supply chain components: data, models, APIs, plugins",
+            "Training-data poisoning and backdoor insertion",
+            "Malicious models on public hubs (HuggingFace, etc.)",
+            "Dependency confusion and pickle-file exploits",
+            "SBOM for AI: tracking model provenance and lineage",
+            "Mitigation: sandboxing, signing, and model scanning"
           ]
         },
         {
@@ -235,6 +261,15 @@
                 "slides/course2/summary_mod4.jpg"
               ]
             }
+          ],
+          "overview": "Applies structured threat modelling frameworks (STRIDE, PASTA, MITRE ATLAS) to AI systems.",
+          "topics": [
+            "MITRE ATLAS: tactics and techniques for ML adversaries",
+            "STRIDE applied to LLM-powered applications",
+            "Data-flow diagrams for AI pipelines",
+            "Trust-boundary analysis: user, model, tool, data store",
+            "Risk scoring and prioritisation for AI threats",
+            "Threat model templates for chatbots, RAG, and agents"
           ]
         },
         {
@@ -287,6 +322,15 @@
                 "slides/course2/summary_mod5.jpg"
               ]
             }
+          ],
+          "overview": "Covers AI governance frameworks, regulatory requirements, and organisational policies for responsible AI deployment.",
+          "topics": [
+            "EU AI Act: risk tiers, obligations, and enforcement",
+            "NIST AI RMF: Govern, Map, Measure, Manage functions",
+            "ISO/IEC 42001 AI management system standard",
+            "Internal AI policy: acceptable use, review boards",
+            "Bias, fairness, and explainability requirements",
+            "Incident response and accountability for AI failures"
           ]
         },
         {
@@ -330,6 +374,15 @@
                 "slides/course2/summary_mod6.jpg"
               ]
             }
+          ],
+          "overview": "Analyses Model Context Protocol (MCP) as an attack surface and explores emerging security controls.",
+          "topics": [
+            "MCP architecture: host, client, server, and tool layers",
+            "Tool-poisoning: malicious server tool definitions",
+            "Prompt injection via MCP tool responses",
+            "Cross-session data leakage through shared context",
+            "Rug-pull attacks: tool behaviour changing post-approval",
+            "Defensive controls: tool allowlisting, output validation"
           ]
         },
         {
@@ -372,6 +425,15 @@
                 "slides/course2/summary_mod7.jpg"
               ]
             }
+          ],
+          "overview": "Explores advanced prompt injection techniques including multi-turn, indirect, and encoding-based bypasses.",
+          "topics": [
+            "Multi-turn jailbreaks: building context across messages",
+            "Indirect injection via documents, URLs, and tool outputs",
+            "Encoding tricks: Base64, ROT13, Unicode homoglyphs",
+            "Many-shot and few-shot persuasion patterns",
+            "Automated red-teaming with PyRIT and Garak",
+            "Detection strategies: input/output filtering, classifiers"
           ]
         },
         {
@@ -424,6 +486,15 @@
                 "slides/course2/summary_mod8.jpg"
               ]
             }
+          ],
+          "overview": "Second-day deep-dive covering practitioner labs, red-team exercises, and emerging offensive AI research.",
+          "topics": [
+            "Hands-on red-team scenario walkthroughs",
+            "Agent exploitation labs: tool misuse and loop attacks",
+            "Multi-modal attack surfaces (vision, audio, code)",
+            "Live demonstration of automated attack pipelines",
+            "Emerging research: adversarial suffixes, sleeper agents",
+            "Blue-team response exercises and incident triage"
           ]
         },
         {
@@ -451,6 +522,15 @@
                 "slides/course2/summary_mod9.jpg"
               ]
             }
+          ],
+          "overview": "Introduces structured prompt engineering and context design to improve security and reliability of LLM outputs.",
+          "topics": [
+            "System prompt architecture: roles, constraints, personas",
+            "Context window management and sensitive data handling",
+            "Instruction hierarchy and conflict resolution",
+            "Few-shot examples as security controls",
+            "Output format enforcement and schema validation",
+            "Testing prompts for robustness and adversarial inputs"
           ]
         },
         {
@@ -495,6 +575,15 @@
                 "slides/course2/summary_mod10.jpg"
               ]
             }
+          ],
+          "overview": "Reviews NCSC and international guidelines for building and deploying secure AI systems.",
+          "topics": [
+            "NCSC principles: secure design, development, deployment",
+            "Secure-by-default configurations for AI services",
+            "Access control, authentication, and API key management",
+            "Logging, monitoring, and anomaly detection for AI",
+            "Vulnerability disclosure and patching for AI components",
+            "Red-team and penetration-test planning for AI systems"
           ]
         }
       ]
@@ -530,6 +619,14 @@
                 "slides/course1/summary_mod0.jpg"
               ]
             }
+          ],
+          "overview": "Course logistics, lab environment setup, and an overview of the AI red-teaming training programme.",
+          "topics": [
+            "Training schedule and module breakdown",
+            "Lab environment: Playground, Coding Labs, MCP Labs",
+            "Discord channel for Q&A and collaboration",
+            "Prerequisites: Python basics, API fundamentals",
+            "Safety and responsible disclosure guidelines"
           ]
         },
         {
@@ -606,6 +703,15 @@
                 "slides/course1/summary_mod1.jpg"
               ]
             }
+          ],
+          "overview": "Welcomes participants, introduces the trainer and training structure, and sets the context for AI red-teaming.",
+          "topics": [
+            "Trainer background: Gary Lopez, AI security research",
+            "AI for security vs. security of AI — two sides of the coin",
+            "What is AI red-teaming and why it differs from classic pentesting",
+            "Lab platform walkthrough: Playground and coding environments",
+            "MCP Labs and Agent Labs overview",
+            "Course communication and community channels"
           ]
         },
         {
@@ -724,6 +830,15 @@
                 "slides/course1/summary_mod2.jpg"
               ]
             }
+          ],
+          "overview": "Builds the ML and GenAI foundations needed to understand and exploit modern AI systems.",
+          "topics": [
+            "Supervised, unsupervised, and reinforcement learning",
+            "Neural network fundamentals: layers, activations, loss",
+            "Transformer architecture: self-attention and positional encoding",
+            "Large language models: pre-training, fine-tuning, RLHF",
+            "Embeddings, vector stores, and retrieval-augmented generation",
+            "Model evaluation: benchmarks, perplexity, and red-team metrics"
           ]
         },
         {
@@ -880,6 +995,15 @@
                 "slides/course1/summary_mod3.jpg"
               ]
             }
+          ],
+          "overview": "Maps the adversarial ML landscape and introduces the GenAI-specific attack taxonomy.",
+          "topics": [
+            "From adversarial examples to LLM jailbreaks — the evolution",
+            "Prompt injection: direct, indirect, and second-order",
+            "Training-data extraction and membership inference",
+            "Model inversion and model stealing attacks",
+            "Evasion attacks on classifiers and safety filters",
+            "MITRE ATLAS: mapping GenAI attacks to the framework"
           ]
         },
         {
@@ -1004,6 +1128,15 @@
                 "slides/course1/summary_mod4.jpg"
               ]
             }
+          ],
+          "overview": "Examines agentic AI architectures and the expanded attack surface they create through tool use and autonomy.",
+          "topics": [
+            "Agent anatomy: planner, memory, tools, and executor",
+            "ReAct and chain-of-thought reasoning patterns",
+            "Tool misuse: abusing function-calling and API access",
+            "Multi-agent systems: trust delegation and message spoofing",
+            "Case Study: OpenClaw — a real-world agentic exploitation",
+            "Prompt injection into agent pipelines via external data"
           ]
         },
         {
@@ -1182,6 +1315,15 @@
                 "slides/course1/summary_mod5.jpg"
               ]
             }
+          ],
+          "overview": "Hands-on introduction to leading open-source AI red-teaming tools: AutoGen, Inspect AI, and PyRIT.",
+          "topics": [
+            "AutoGen: orchestrating multi-agent attack scenarios",
+            "AutoGen Lab: building adversarial agent conversations",
+            "Inspect AI: structured evaluation and benchmark attacks",
+            "Inspect AI Evaluations: scoring model safety properties",
+            "PyRIT: Python Risk Identification Toolkit for LLMs",
+            "PyRIT Lab: automated jailbreak and injection pipelines"
           ]
         },
         {
@@ -1235,6 +1377,15 @@
                 "slides/course1/summary_mod6.jpg"
               ]
             }
+          ],
+          "overview": "Advanced attack techniques day-two content covering sophisticated exploitation of LLMs and agent systems.",
+          "topics": [
+            "Advanced jailbreaking: GCG adversarial suffixes",
+            "Sleeper-agent attacks and hidden backdoors",
+            "Cross-context injection in RAG pipelines",
+            "Exploiting long-context windows and memory",
+            "Chained attacks combining multiple techniques",
+            "Real-world case studies from bug bounty and research"
           ]
         },
         {
@@ -1415,6 +1566,15 @@
                 "slides/course1/summary_mod7.jpg"
               ]
             }
+          ],
+          "overview": "Explores attack and defence considerations unique to multi-modal models combining vision, audio, and text.",
+          "topics": [
+            "Evolution from text-only to multi-modal LLMs (GPT-4V, Gemini)",
+            "Visual adversarial examples: imperceptible image perturbations",
+            "Prompt injection via images, PDFs, and audio inputs",
+            "OCR exploitation and document-based injection",
+            "Audio jailbreaks and voice-cloning misuse",
+            "Multi-modal safety benchmarks and evaluation"
           ]
         },
         {
@@ -1517,6 +1677,15 @@
                 "slides/course1/summary_mod8.jpg"
               ]
             }
+          ],
+          "overview": "Frames AI red-teaming within Responsible AI principles and introduces a repeatable red-team process.",
+          "topics": [
+            "Responsible AI pillars: fairness, reliability, safety, privacy",
+            "AI red-team charter: scope, rules, and ethics",
+            "The AIRT process: plan → execute → document → remediate",
+            "Findings classification: severity, exploitability, impact",
+            "Communicating results to engineering and executive audiences",
+            "Integrating AI red-teaming into the SDLC"
           ]
         },
         {
@@ -1589,6 +1758,15 @@
                 "slides/course1/summary_mod9.jpg"
               ]
             }
+          ],
+          "overview": "Surveys defence-in-depth strategies and mitigations that reduce AI-specific attack risk.",
+          "topics": [
+            "Defence-in-depth for AI: layers from data to inference",
+            "Input validation and prompt sanitisation techniques",
+            "Output filtering: classifiers, blocklists, and schema checks",
+            "Least-privilege for agents: minimal tool scope and access",
+            "Monitoring and anomaly detection for LLM workloads",
+            "Patch management and model versioning strategies"
           ]
         },
         {
@@ -1663,6 +1841,15 @@
                 "slides/course1/summary_mod10.jpg"
               ]
             }
+          ],
+          "overview": "Looks at AI applications in scientific research and closes the course with open discussion on future directions.",
+          "topics": [
+            "AI x Science: drug discovery, climate, and materials science",
+            "Unique security risks in scientific AI pipelines",
+            "Dual-use research of concern (DURC) in AI",
+            "Emerging threats: autonomous AI agents in the wild",
+            "Open Q&A: participant scenarios and edge cases",
+            "Resources for continued learning and community involvement"
           ]
         }
       ]

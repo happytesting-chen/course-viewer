@@ -354,36 +354,19 @@ body {
   margin-bottom: 1rem;
 }
 
-#about-panel p {
+#about-para1 {
   font-size: .95rem;
-  color: var(--text-muted);
-  line-height: 1.7;
-  margin-bottom: 2rem;
-}
-
-#about-panel h3 {
-  font-size: .85rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: .07em;
-  color: var(--text-muted);
-  margin-bottom: .75rem;
-}
-
-#about-modules {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: .5rem;
-}
-
-#about-modules li {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: .65rem 1rem;
-  font-size: .88rem;
   color: var(--text);
+  line-height: 1.75;
+  margin-bottom: 1.5rem;
+}
+
+#about-para2 {
+  font-size: .9rem;
+  color: var(--text-muted);
+  line-height: 1.75;
+  border-left: 3px solid var(--accent);
+  padding-left: 1rem;
 }
 
 /* ── Fullscreen overlay ────────────────────────────────────── */
